@@ -1,0 +1,210 @@
+import AllPathsBootstrap
+import AllPathsCombGen
+import AllPathsContainerPowerScaled
+import AllPathsContract
+import AllPathsEHBridge
+import AllPathsEHBridgeScalars
+import AllPathsEHThinLayer
+import AllPathsEHTransversalCounting
+import AllPathsFinalGen
+import AllPathsForcing
+import AllPathsFrontier
+import AllPathsFrontierCore
+import AllPathsFrontierNum
+import AllPathsFrontierPasses
+import AllPathsLexPower
+import AllPathsLift
+import AllPathsLight
+import AllPathsLocal
+import AllPathsMain
+import AllPathsNegativeBridge
+import AllPathsNegativeOrder
+import AllPathsOffendingPurification
+import AllPathsOffendingRepresentative
+import AllPathsP7Comb
+import AllPathsP7Final
+import AllPathsP7Nice
+import AllPathsP7Round1
+import AllPathsRecurrence
+import AllPathsRecurrenceGraph
+import AllPathsRootedRecurrence
+import AllPathsRound2Gen
+import AllPathsSubstEH
+import AllPathsSubstitution
+import AllPathsTail
+import AllPathsTemplate
+import AllPathsThinCountScaled
+import AllPathsThinScalarScaled
+import AllPathsTower
+import RP5ActualSampling
+import RP5AtomBudget
+import RP5BinomialRatio
+import RP5CollisionDeletion
+import RP5CollisionMass
+import RP5ColorClique
+import RP5Components
+import RP5ConditionalThinLayer
+import RP5ContainerAlgorithm
+import RP5ContainerCount
+import RP5ContainerCover
+import RP5ContainerEncoding
+import RP5ContainerInvariants
+import RP5ContainerLogBudget
+import RP5ContainerPowerBound
+import RP5ContainerRecordBound
+import RP5ContainerReplay
+import RP5ContainerStep
+import RP5CutChildren
+import RP5CutTree
+import RP5CycleEndpoints
+import RP5CycleRotation
+import RP5DecisionNormalization
+import RP5DirectionalMass
+import RP5EarlyConversion
+import RP5ExactLengths
+import RP5ExceptionBudget
+import RP5FactorialBound
+import RP5FiniteCertificate
+import RP5FirstRound
+import RP5Frontier
+import RP5FrontierAssembly
+import RP5FrontierMass
+import RP5FrontierParameters
+import RP5FrontierPipeline
+import RP5GlobalOrder
+import RP5GlobalPurification
+import RP5Grouping
+import RP5Interval
+import RP5LabelledPath
+import RP5LargeFrontierConclusion
+import RP5LayerInterfaces
+import RP5LayerMass
+import RP5LengthBounds
+import RP5ManyHomogeneous
+import RP5NegativeCertificate
+import RP5NegativeConclusion
+import RP5NegativeFringe
+import RP5NegativeLayerGeometry
+import RP5NegativeScale
+import RP5NegativeWeakChordal
+import RP5Order
+import RP5OrderedCertificate
+import RP5OrderedCertificateStructure
+import RP5OrderedCliqueWitness
+import RP5OrderedGreedyStable
+import RP5OrderedLayers
+import RP5OrderedSelection
+import RP5OrderedTransversalCertificate
+import RP5PaperFrontier
+import RP5PaperReduction
+import RP5PathForcing
+import RP5PathGeometry
+import RP5PathSelection
+import RP5PositiveBounds
+import RP5PositiveConclusion
+import RP5PositiveCount
+import RP5PositiveSelection
+import RP5Profiles
+import RP5Purification
+import RP5QuantitativeFrontier
+import RP5RankSelection
+import RP5Reduction
+import RP5RetainedFrontier
+import RP5RetainedTree
+import RP5RootCut
+import RP5RootFamilies
+import RP5SeparatedPipeline
+import RP5SeparatedQuantitative
+import RP5SizeTail
+import RP5SortedSelection
+import RP5Structure
+import RP5SubsetDoubleCounting
+import RP5ThinCountContradiction
+import RP5ThinLayerPaper
+import RP5ThinLayerStrong
+import RP5ThinLogError
+import RP5ThinParameterLogs
+import RP5ThinSamplingScale
+import RP5ThinScalarContradiction
+import RP5Tooth
+import RP5TreeDichotomy
+import RP5TreeFrontier
+import RP5TreeMass
+import RP5UnaryLayers
+import RP5UniformCollisionBound
+import RP5UniformSampling
+import RP5WidthBounds
+import RP5YParameters
+set_option pp.proofs false
+#check @AllPathsLocal.rp5_tooth
+#print axioms AllPathsLocal.rp5_tooth
+#check @AllPathsLocal.eh_transversal_bridge_paper
+#print axioms AllPathsLocal.eh_transversal_bridge_paper
+#check @AllPathsLocal.actual_negative_direction_conclusion_eh
+#print axioms AllPathsLocal.actual_negative_direction_conclusion_eh
+#check @AllPathsLocal.ehOn_module_replace
+#print axioms AllPathsLocal.ehOn_module_replace
+#check @AllPathsLocal.lexPow_ramsey
+#print axioms AllPathsLocal.lexPow_ramsey
+#check @AllPathsLocal.ehOn_lexPow
+#print axioms AllPathsLocal.ehOn_lexPow
+#check @AllPathsLocal.comb_oracle_p7
+#print axioms AllPathsLocal.comb_oracle_p7
+#check @AllPathsLocal.round1_p7
+#print axioms AllPathsLocal.round1_p7
+#check @AllPathsLocal.nice_P7
+#print axioms AllPathsLocal.nice_P7
+#check @AllPathsLocal.tower_homogenize
+#print axioms AllPathsLocal.tower_homogenize
+#check @AllPathsLocal.forcing_step
+#print axioms AllPathsLocal.forcing_step
+#check @AllPathsLocal.forcing_template
+#print axioms AllPathsLocal.forcing_template
+#check @AllPathsLocal.light_hom_template
+#print axioms AllPathsLocal.light_hom_template
+#check @AllPathsLocal.round2_step_gen
+#print axioms AllPathsLocal.round2_step_gen
+#check @AllPathsLocal.lightHom_P7
+#print axioms AllPathsLocal.lightHom_P7
+#check @AllPathsLocal.crux_P7
+#print axioms AllPathsLocal.crux_P7
+#check @AllPathsLocal.c01_lemma1_p7
+#print axioms AllPathsLocal.c01_lemma1_p7
+#check @AllPathsLocal.nss_path7_proof
+#print axioms AllPathsLocal.nss_path7_proof
+#check @AllPathsLocal.erdos_hajnal_P7_of_inputs
+#print axioms AllPathsLocal.erdos_hajnal_P7_of_inputs
+#check @AllPathsLocal.erdos_hajnal_P7_of_cited
+#print axioms AllPathsLocal.erdos_hajnal_P7_of_cited
+#check @AllPathsLocal.erdos_hajnal_P7_of_rodl
+#print axioms AllPathsLocal.erdos_hajnal_P7_of_rodl
+#check @AllPathsLocal.classEH_of_nice
+#print axioms AllPathsLocal.classEH_of_nice
+#check @AllPathsLocal.nice_of_oracle
+#print axioms AllPathsLocal.nice_of_oracle
+#check @AllPathsLocal.lowerTooth_five
+#print axioms AllPathsLocal.lowerTooth_five
+#check @AllPathsLocal.comb_oracle_gen
+#print axioms AllPathsLocal.comb_oracle_gen
+#check @AllPathsLocal.tail_oracle
+#print axioms AllPathsLocal.tail_oracle
+#check @AllPathsLocal.orderedClassEH_of_tooth
+#print axioms AllPathsLocal.orderedClassEH_of_tooth
+#check @AllPathsLocal.rpq_frontier_core
+#print axioms AllPathsLocal.rpq_frontier_core
+#check @AllPathsLocal.rpq_frontier
+#print axioms AllPathsLocal.rpq_frontier
+#check @AllPathsLocal.rpq_frontier_list
+#print axioms AllPathsLocal.rpq_frontier_list
+#check @AllPathsLocal.rpq_tooth
+#print axioms AllPathsLocal.rpq_tooth
+#check @AllPathsLocal.tooth_all
+#print axioms AllPathsLocal.tooth_all
+#check @AllPathsLocal.eh_path_step
+#print axioms AllPathsLocal.eh_path_step
+#check @AllPathsLocal.eh_path_succ
+#print axioms AllPathsLocal.eh_path_succ
+#check @AllPathsLocal.eh_all_paths
+#print axioms AllPathsLocal.eh_all_paths
+#check @AllPathsLocal.eh_all_paths_of_rodl
+#print axioms AllPathsLocal.eh_all_paths_of_rodl

@@ -1,8 +1,30 @@
-# Revision notes (7 October 2026)
+# Revision notes
+
+## 7 October 2026 (evening): Lean formalization added
+
+- Added `lean/`: a Lean 4 / mathlib (v4.34.1) formalization of the whole induction.
+  `AllPathsLocal.eh_all_paths` proves EH(P_s) for every s from three displayed hypotheses:
+  Rödl's theorem for the complement of P_s (s ≥ 7), the comb lemma (NSS VII Lemma 4.3) and
+  EH(P_6). It uses only the standard axioms. The P6 base project
+  (machine-qed/erdos-hajnal-six-vertex-path, v1.0-proof, Apache-2.0) is included unchanged
+  under `lean/EHP6/`.
+- The formal proof follows a modified route; README.md lists the differences. In short:
+  - the leaf-fibre / virality / product terminal argument is replaced by the P6 project's
+    niceness ⇒ EH chain, with the house lemma replaced by the forcing template;
+  - the specialized RP6 appendices are replaced by the general RPq recurrence starting at
+    q = 6;
+  - Hayward's theorem is replaced by an ordered clique/colouring certificate;
+  - combs come from NSS VII Lemma 4.3.
+  The Bucić–Fox–Pham, Huang–Ju–Zhou and Hayward results are no longer inputs.
+- README.md updated: dependencies, verification status, build instructions.
+- The manuscript in `paper/` is unchanged (the previous draft). It does not yet follow
+  the formalized route; a revised text is in preparation.
+
+## 7 October 2026: revised draft
 
 Numbering of theorems, lemmas and contracts is unchanged from the earlier draft.
 
-## Mathematical corrections
+### Mathematical corrections
 
 1. **Contract 2.6** (sparse induced-path extraction): added `k ≥ 2` and `|J| ≥ z^{-2}`.
    Blocks are nonempty in this paper, so the source statement (which allows empty blocks)
@@ -25,7 +47,7 @@ Numbering of theorems, lemmas and contracts is unchanged from the earlier draft.
 7. The introduction states that the main theorem is conditional on the unrefereed
    EH(P_6) result.
 
-## Presentation
+### Presentation
 
 Substitution arrow, implication arrows, subscripted constants, numbered key displays
 (A.1, G.1–G.5, H.1–H.3, K.1–K.2), local size cutoff renamed `s_cut`, output lists set as
