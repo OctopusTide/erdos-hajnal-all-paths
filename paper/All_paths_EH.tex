@@ -82,13 +82,15 @@ The Lean proof of \(\EH(P_6)\) in \cite{p6} assumes three statements as axioms: 
 
 The development adds \(439\) theorem declarations in \(137\) source files to the \(P_6\) project. It was compiled on a Linux machine with the same Lean release and pinned dependencies, and the audit entry point \texttt{FinalAllLocal439} was replayed by \texttt{leanchecker --fresh}. Its source files contain no \texttt{sorry}, \texttt{admit}, \texttt{axiom}, \texttt{unsafe} or \texttt{native\_decide}.
 
-The formal proof follows the architecture of this paper, but departs from the written proofs at three points. No statement is changed.
+The formal proof follows the architecture of this paper, but departs from the written proofs at five points. No statement is changed.
 \begin{enumerate}[label=(\roman*)]
 \item The final step from generalized niceness to the Erd\H{o}s--Hajnal property uses the argument of \cite{nss7}, already formalized in \cite{p6}, with its house lemma replaced by the forcing template of Section~\ref{sec:arm}. Appendix~\ref{app:terminal} is not used.
 \item \(T_6^{(s)}\) is obtained from the general RP\(q\) recurrence of Appendix~\ref{app:rpq}, with the RP5 contract applied to the RP4 representatives, instead of Appendices~\ref{app:rp6front} and~\ref{app:rp6}.
-\item The layout lemma of \cite{p6} replaces Lemma~\ref{lem:layout}, and all exponents are those chosen in the formalization rather than the constants displayed here.
+\item Hayward's theorem is not used. In the negative branch of Appendix~\ref{app:rp5}, a partial transversal ordered by layers has no induced \(P_4\) whose earliest vertex is an endpoint. A greedy stable set taken in this order yields a proper colouring together with a clique of the same size, so \(\alpha\omega\) is at least the order of the transversal, the only consequence of perfection used in the proof of Lemma~\ref{lem:thin}.
+\item Combs are extracted with the comb lemma \cite[Lemma~4.3]{nss7}, as in \cite{p6}, rather than with Contract~\ref{con:comb}.
+\item The layout lemma of \cite{p6} replaces Lemma~\ref{lem:layout}. The tower construction of Lemma~\ref{lem:homogenize} is replaced by a forward construction that homogenizes only consecutive fibres, with the diagonal pairs of the two-labelled lifts chosen independently. All exponents are those chosen in the formalization rather than the constants displayed here.
 \end{enumerate}
-Accordingly, Appendices~\ref{app:rp6front}, \ref{app:rp6}, \ref{app:layout} and~\ref{app:terminal}, and the displayed constants, are verified on paper only.
+Consequently, the comb extraction of \cite{hjz}, the virality theorem of \cite{bfp} and Hayward's theorem \cite{hayward} are not inputs of the formal proof. Appendices~\ref{app:rp6front}, \ref{app:rp6}, \ref{app:layout} and~\ref{app:terminal}, the uses of Contracts~\ref{con:comb} and~\ref{con:viral}, and the displayed constants are verified on paper only.
 
 \section{Definitions, orientations and standard inputs}\label{sec:notation}
 \begin{definition}
@@ -360,7 +362,7 @@ All possibilities have yielded TL1--TL5. This proves the general Tooth lemma, in
 
 
 
-\begin{lemma}
+\begin{lemma}\label{lem:thin}
 Suppose a set of size \(M\) is partitioned into nonempty layers \(A_i\), every partial transversal induces a perfect graph, and
 \[
  \lambda=\frac{\max_i|A_i|}{M}\le\frac{\varepsilon^4}{128},
