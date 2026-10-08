@@ -41,11 +41,11 @@
 \hypersetup{pdftitle={An inductive approach to the Erdos-Hajnal property for fixed induced paths},pdfauthor={Yuwen Zhou},pdfsubject={Mathematical manuscript}}
 \begin{document}
 \title{An Inductive Approach to the Erd\H{o}s--Hajnal Property\\for Fixed Induced Paths}
-\author{Yuwen Zhou}
+\author{Yuwen Zhou\\[2pt]\small University of British Columbia Okanagan}
 \date{7 October 2026}
 \maketitle
 \begin{abstract}
-We develop a consecutive-path induction for the Erd\H{o}s--Hajnal property. Finite forcing templates, obtained by substitution and vertex-Ramsey amplification, yield a strong light-mixing statement from an exponent for the preceding path. Rooted Tooth recurrences in a fixed hereditary ambient class then combine with ordered-tail transfer and variable-scale sparsification. The final step uses leaf fibres and a product criterion for uniform blockades. We give the supporting structural and sampling proofs, retaining the actual integer lengths and restricted scales throughout.
+We develop a consecutive-path induction for the Erd\H{o}s--Hajnal property. Finite forcing templates, obtained by substitution and vertex-Ramsey amplification, yield a strong light-mixing statement from an exponent for the preceding path. Rooted Tooth recurrences in a fixed hereditary ambient class then combine with ordered-tail transfer and variable-scale sparsification. The final step uses leaf fibres and a product criterion for uniform blockades. We give the supporting structural and sampling proofs, retaining the actual integer lengths and restricted scales throughout. The resulting implication has been formalized in Lean~4: there, the Erd\H{o}s--Hajnal property of every fixed path follows from R\"odl's theorem, the Erd\H{o}s--Hajnal property of \(P_5\), and the comb lemma of Nguyen, Scott and Seymour.
 \end{abstract}
 \tableofcontents
 \clearpage
@@ -54,7 +54,7 @@ For a graph \(G\), write \(\hom(G)=\max\{\alpha(G),\omega(G)\}\). A fixed graph 
 \begin{theorem}\label{thm:target}
 For every integer \(s\ge1\), there is \(\delta_s>0\) such that every \(P_s\)-free graph \(G\) of order \(n\ge1\) satisfies \(\hom(G)\ge n^{\delta_s}\). The same assertion holds for \(\overline{P_s}\)-free graphs. The exponent depends on \(s\), but not on \(G\) or \(n\).
 \end{theorem}
-The induction uses \(\EH(P_6)\) from Theorem A of machine-qed, \emph{The Erd\H{o}s--Hajnal property for the six-vertex path}, repository version \texttt{v1.0-proof}, released 27 September 2026 \cite{p6}. This is the sole six-vertex base input. Theorem~\ref{thm:target} is therefore conditional on that result, which is unrefereed and is neither re-derived nor re-verified here; the arguments below concern only the passage from \(\EH(P_{s-1})\) to \(\EH(P_s)\).
+The induction uses \(\EH(P_6)\) from Theorem A of machine-qed, \emph{The Erd\H{o}s--Hajnal property for the six-vertex path}, repository version \texttt{v1.0-proof}, released 27 September 2026 \cite{p6}. This is the sole six-vertex base input. That result is unrefereed; its proof is formalized in Lean relative to three published statements, as described in Section~\ref{subsec:formal}. The arguments of this paper concern the passage from \(\EH(P_{s-1})\) to \(\EH(P_s)\).
 
 For a fixed \(s\ge7\), Part I derives strong wonderfulness \(W_s\) from \(\EH(P_{s-1})\). Part II fixes the hereditary ambient class \(\Forb(P_s)\) and proves rooted Tooth statements \(T_r^{(s)}\). The superscript records the ambient class and stays unchanged in every lower-order call. The dependencies are
 \begin{align*}
@@ -69,6 +69,26 @@ T_{s-2}^{(s)}+W_s+\EH(P_{s-1})
 The ambient-independent RP5 theorem starts the rooted induction. The RP6 step uses RP5 twice and the general RP4 Tooth once; subsequent orders use a common lower-order contract. Ordered-tail transfer supplies the relative ordered-class exponent before each next rooted-order step. Thus neither \(\EH(P_s)\) nor virality of the ordered class is assumed in proving \(\EH(P_s)\).
 
 The appendices contain the general Tooth proof, perfect-transversal sampling, the RP5 theorem, an EH-transversal bridge, the RP6 and RP\(q\) recurrences, the variable-scale bootstrap, the layout lemma, ordered-tail transfer, and the terminal product argument.
+
+\subsection{Formal verification}\label{subsec:formal}
+The implication behind Theorem~\ref{thm:target} has been formalized in Lean~4 (version 4.34.1, with Mathlib). The final declaration, \texttt{AllPathsLocal.eh\_all\_paths}, states
+\[
+ \bigl(\forall s\ge 7:\ \mathrm{RodlCo}(s)\bigr)\ \wedge\ \mathrm{NssComb}\ \wedge\ \mathrm{EH}(P_6)
+ \ \Longrightarrow\ \forall s:\ \mathrm{EH}(P_s).
+\]
+Here \(\mathrm{EH}(P_s)\) is the statement of Theorem~\ref{thm:target} for finite \(P_s\)-free graphs, with induced copies. \(\mathrm{RodlCo}(s)\) is R\"odl's theorem \cite{rodl} for graphs with no induced \(\overline{P_s}\), in the maximum-degree form of \cite[Theorem~1.3]{nss7} and Contract~\ref{con:rodl}. \(\mathrm{NssComb}\) is the comb lemma \cite[Lemma~4.3]{nss7}. For this declaration Lean reports only its three standard axioms (\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}).
+
+The Lean proof of \(\EH(P_6)\) in \cite{p6} assumes three statements as axioms: R\"odl's theorem for \(\overline{P_6}\), the Erd\H{o}s--Hajnal property of \(P_5\) \cite[Theorem~1.2]{nss7}, and the comb lemma. Combining it with the declaration above gives \texttt{AllPathsLocal.eh\_all\_paths\_of\_rodl}, whose only non-standard axioms are these three published statements, together with the hypothesis \(\mathrm{RodlCo}(s)\) for \(s\ge7\). Thus, in Lean, Theorem~\ref{thm:target} follows from R\"odl's theorem, \(\EH(P_5)\) and the comb lemma. None of these three inputs is itself formalized. The sparse induced-path extraction of Contract~\ref{con:path} is proved in \cite{p6}.
+
+The development adds \(439\) theorem declarations in \(137\) source files to the \(P_6\) project. It was compiled on a Linux machine with the same Lean release and pinned dependencies, and the audit entry point \texttt{FinalAllLocal439} was replayed by \texttt{leanchecker --fresh}. Its source files contain no \texttt{sorry}, \texttt{admit}, \texttt{axiom}, \texttt{unsafe} or \texttt{native\_decide}.
+
+The formal proof follows the architecture of this paper, but departs from the written proofs at three points. No statement is changed.
+\begin{enumerate}[label=(\roman*)]
+\item The final step from generalized niceness to the Erd\H{o}s--Hajnal property uses the argument of \cite{nss7}, already formalized in \cite{p6}, with its house lemma replaced by the forcing template of Section~\ref{sec:arm}. Appendix~\ref{app:terminal} is not used.
+\item \(T_6^{(s)}\) is obtained from the general RP\(q\) recurrence of Appendix~\ref{app:rpq}, with the RP5 contract applied to the RP4 representatives, instead of Appendices~\ref{app:rp6front} and~\ref{app:rp6}.
+\item The layout lemma of \cite{p6} replaces Lemma~\ref{lem:layout}, and all exponents are those chosen in the formalization rather than the constants displayed here.
+\end{enumerate}
+Accordingly, Appendices~\ref{app:rp6front}, \ref{app:rp6}, \ref{app:layout} and~\ref{app:terminal}, and the displayed constants, are verified on paper only.
 
 \section{Definitions, orientations and standard inputs}\label{sec:notation}
 \begin{definition}
@@ -1139,6 +1159,7 @@ Thus \(Q(G)\ge n^\tau\) for all members, and \(\hom(G)^2\ge Q(G)\) gives the exp
 \bibitem{bfp} Matija Buci\'c, Jacob Fox and Huy Tuan Pham. \emph{Equivalence between Erd\H{o}s--Hajnal and polynomial R\"odl and Nikiforov conjectures}. arXiv:2403.08303v2, 19 April 2024.\\ \url{https://arxiv.org/html/2403.08303v2}.
 \bibitem{hjz} Shenwei Huang, Yiao Ju and Yidong Zhou. \emph{Erd\H{o}s--Hajnal conjecture beyond five-vertex graphs}. arXiv:2606.06258v3, 31 August 2026, Lemma 2.10.\\ \url{https://arxiv.org/html/2606.06258v3}.
 \bibitem{hayward} Ryan B. Hayward. \emph{Weakly triangulated graphs}. Journal of Combinatorial Theory, Series B 39(3) (1985), 200--208.\\ \url{https://doi.org/10.1016/0095-8956(85)90050-4}.
+\bibitem{nss7} Tung Nguyen, Alex Scott and Paul Seymour. \emph{Induced subgraph density. VII. The five-vertex path}. arXiv:2312.15333v3, 23 February 2026.\\ \url{https://arxiv.org/abs/2312.15333}.
 \bibitem{rodl} V. R\"odl. \emph{On universality of graphs with uniformly distributed edges}. Discrete Mathematics 59 (1986), 125--134.
 \end{thebibliography}
 \end{document}

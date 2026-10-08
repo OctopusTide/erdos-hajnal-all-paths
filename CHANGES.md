@@ -1,5 +1,12 @@
 # Revision notes
 
+## 7 October 2026 (night): manuscript updated
+
+- Author and affiliation added.
+- New Section 1.1, *Formal verification*, with the Lean statement of the main implication and
+  its published inputs; abstract and introduction refer to it.
+- Bibliography: added Nguyen–Scott–Seymour, *Induced subgraph density VII* (arXiv:2312.15333).
+
 ## 7 October 2026 (evening): Lean formalization added
 
 - Added `lean/`: a Lean 4 / mathlib (v4.34.1) formalization of the whole induction.
@@ -17,8 +24,6 @@
   - combs come from NSS VII Lemma 4.3.
   The Bucić–Fox–Pham, Huang–Ju–Zhou and Hayward results are no longer inputs.
 - README.md updated: dependencies, verification status, build instructions.
-- The manuscript in `paper/` is unchanged (the previous draft). It does not yet follow
-  the formalized route; a revised text is in preparation.
 
 ## 7 October 2026: revised draft
 
