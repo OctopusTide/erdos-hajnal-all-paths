@@ -1,0 +1,1144 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=27mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{booktabs,longtable,array,enumitem}
+\usepackage{xcolor,fancyhdr}
+\usepackage[unicode,colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\usepackage{bookmark}
+\usepackage{xurl}
+\usepackage{needspace}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{hypothesis}[theorem]{Hypothesis}
+\newtheorem{contract}[theorem]{Contract}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem*{remark*}{Remark}
+\numberwithin{equation}{section}
+\DeclareMathOperator{\Forb}{Forb}
+\DeclareMathOperator{\RP}{RP}
+\DeclareMathOperator{\co}{co}
+\newcommand{\EH}{\mathrm{EH}}
+\newcommand{\Ps}{P_s}
+\newcommand{\Gbar}{\overline{G}}
+\setlist{nosep,leftmargin=2em}
+\setlength{\emergencystretch}{3em}
+\setlength{\parskip}{3pt}
+\setlength{\parindent}{1.3em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small The Erd\H{o}s--Hajnal property for induced paths}
+\fancyhead[R]{\small 7 October 2026}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\hypersetup{pdftitle={An inductive approach to the Erdos-Hajnal property for fixed induced paths},pdfauthor={Yuwen Zhou},pdfsubject={Mathematical manuscript}}
+\begin{document}
+\title{An Inductive Approach to the Erd\H{o}s--Hajnal Property\\for Fixed Induced Paths}
+\author{Yuwen Zhou}
+\date{7 October 2026}
+\maketitle
+\begin{abstract}
+We develop a consecutive-path induction for the Erd\H{o}s--Hajnal property. Finite forcing templates, obtained by substitution and vertex-Ramsey amplification, yield a strong light-mixing statement from an exponent for the preceding path. Rooted Tooth recurrences in a fixed hereditary ambient class then combine with ordered-tail transfer and variable-scale sparsification. The final step uses leaf fibres and a product criterion for uniform blockades. We give the supporting structural and sampling proofs, retaining the actual integer lengths and restricted scales throughout.
+\end{abstract}
+\tableofcontents
+\clearpage
+\section{Introduction}\label{sec:intro}
+For a graph \(G\), write \(\hom(G)=\max\{\alpha(G),\omega(G)\}\). A fixed graph \(H\) has the Erd\H{o}s--Hajnal property if some \(\delta>0\) satisfies \(\hom(G)\ge |G|^\delta\) for every nonempty graph with no induced copy of \(H\). We study this property when \(H\) is a path.
+\begin{theorem}\label{thm:target}
+For every integer \(s\ge1\), there is \(\delta_s>0\) such that every \(P_s\)-free graph \(G\) of order \(n\ge1\) satisfies \(\hom(G)\ge n^{\delta_s}\). The same assertion holds for \(\overline{P_s}\)-free graphs. The exponent depends on \(s\), but not on \(G\) or \(n\).
+\end{theorem}
+The induction uses \(\EH(P_6)\) from Theorem A of machine-qed, \emph{The Erd\H{o}s--Hajnal property for the six-vertex path}, repository version \texttt{v1.0-proof}, released 27 September 2026 \cite{p6}. This is the sole six-vertex base input. Theorem~\ref{thm:target} is therefore conditional on that result, which is unrefereed and is neither re-derived nor re-verified here; the arguments below concern only the passage from \(\EH(P_{s-1})\) to \(\EH(P_s)\).
+
+For a fixed \(s\ge7\), Part I derives strong wonderfulness \(W_s\) from \(\EH(P_{s-1})\). Part II fixes the hereditary ambient class \(\Forb(P_s)\) and proves rooted Tooth statements \(T_r^{(s)}\). The superscript records the ambient class and stays unchanged in every lower-order call. The dependencies are
+\begin{align*}
+\EH(P_{s-1})&\Longrightarrow W_s,\\
+T_r^{(s)}+W_s+\EH(P_{s-1})
+ &\Longrightarrow \EH(E_r\cap\Forb(P_s)),\\
+T_{q-1}^{(s)}+T_{q-2}^{(s)}+\EH(E_{q-1}\cap\Forb(P_s))
+ &\Longrightarrow T_q^{(s)},\\
+T_{s-2}^{(s)}+W_s+\EH(P_{s-1})
+ &\Longrightarrow \EH(P_s).
+\end{align*}
+The ambient-independent RP5 theorem starts the rooted induction. The RP6 step uses RP5 twice and the general RP4 Tooth once; subsequent orders use a common lower-order contract. Ordered-tail transfer supplies the relative ordered-class exponent before each next rooted-order step. Thus neither \(\EH(P_s)\) nor virality of the ordered class is assumed in proving \(\EH(P_s)\).
+
+The appendices contain the general Tooth proof, perfect-transversal sampling, the RP5 theorem, an EH-transversal bridge, the RP6 and RP\(q\) recurrences, the variable-scale bootstrap, the layout lemma, ordered-tail transfer, and the terminal product argument.
+
+\section{Definitions, orientations and standard inputs}\label{sec:notation}
+\begin{definition}
+All graphs are finite and simple. \(P_r\) is the path on \(r\) vertices. For a graph \(G\), set \(F=\overline G\), \(\hom(G)=\max(\alpha(G),\omega(G))\), and \(Q(G)=\alpha(G)\omega(G)\). A graph is \(H\)-free when it has no induced copy of \(H\). The class \(\Forb(H)\) is hereditary. An all-orders EH exponent \(\kappa>0\) for \(H\) means \(\hom(J)\ge |J|^\kappa\) for every nonempty \(H\)-free graph \(J\).
+\end{definition}
+\begin{definition}
+A set \(S\) is \(\varepsilon\)-sparse when \(\Delta(G[S])\le\varepsilon|S|\). It is \(\varepsilon\)-restricted when this holds in \(G[S]\) or \(F[S]\). Where explicitly stated, the stronger convention \(\varepsilon(|S|-1)\) is used. A pair \(B,A\) is directed \(\varepsilon\)-sparse from \(B\) to \(A\) if every vertex of \(B\) has at most \(\varepsilon|A|\) neighbours in \(A\). Bidirectional sparsity requires both directions; weak sparsity means only \(e(A,B)\le\varepsilon|A||B|\). Directed \(\varepsilon\)-sparsity from \(B\) to \(A\) gives \(e(A,B)\le\varepsilon|A||B|\), so it implies weak \(\varepsilon\)-sparsity. The converse is false, since weak sparsity bounds no individual degree.
+\end{definition}
+\begin{definition}
+A blockade is an ordered sequence of pairwise disjoint nonempty sets. Its length is its actual integer number of blocks and its width is their minimum order. It is pure if every pair is complete or anticomplete, and directed \(\varepsilon\)-semisparse if each pair is complete or directed \(\varepsilon\)-sparse from the later block to the earlier block. A weakly semisparse blockade uses weak sparsity instead. A complete blockade and an anticomplete blockade each have a uniform pair type. A general pure pattern can mix the two types. Every directed \(\varepsilon\)-semisparse blockade is thus weakly \(\varepsilon\)-semisparse, but not conversely. Each statement below specifies which of the two notions it uses.
+\end{definition}
+\begin{definition}
+For a root \(u\notin Y\), \(\RP_r(u,Y)\) means that \(F[Y\cup\{u\}]\) has no induced \(r\)-vertex path with endpoint \(u\). The roots are vertices of the original host, and this exclusion refers to the original target \(Y\). Restricting the target inherits the exclusion. \(E_r\) is the hereditary class of graphs that admit a linear order in which the first vertex of every induced \(P_r\) is not an endpoint.
+\end{definition}
+An anticomponent is a component in the complement. A module is a set seen completely or anticompletely by each outside vertex. A strong module overlaps no module except by containment. Substitution \(H[J_1,\ldots,J_a]\) replaces the vertices of \(H\) by the graphs \(J_i\), joining two fibres completely exactly on the edges of \(H\).
+
+\begin{contract}[Fixed precision R\"odl]\label{con:rodl}
+For every fixed forbidden graph \(H\) and fixed \(\eta>0\), there is \(\delta>0\) such that every \(H\)-free graph has an \(\eta\)-restricted induced subgraph of order at least \(\delta|G|\). Only fixed choices of precision are used \cite{rodl,nss}.
+\end{contract}
+\begin{contract}[Sparse induced-path extraction]\label{con:path}
+If \(P\) is a path with \(k\ge2\) vertices, \(0<z\le1/(60k)\), and \(J\) is a \(z^2\)-sparse \(P\)-free graph with \(|J|\ge z^{-2}\), then \(J\) has an anticomplete blockade of length at least \(1/z\) and width at least \(\lfloor z^2|J|\rfloor\ge1\) \cite[Statement 3.1]{nss}.
+\end{contract}
+\begin{remark*}
+In \cite{nss} the blocks of a blockade may be empty, and Statement 3.1 there has no hypothesis on \(|J|\). Blocks are nonempty in this paper, and then the hypothesis \(|J|\ge z^{-2}\) cannot be omitted: a one-vertex graph \(J\), with \(P=P_2\) and \(z=1/120\), satisfies every other hypothesis but has no blockade of length \(120\). Under the hypothesis, \(\lfloor z^2|J|\rfloor\ge1\), so the blockade supplied by \cite{nss} has nonempty blocks. The hypothesis is verified at each use of Contract~\ref{con:path}: in the proof of Theorem~\ref{thm:bootstrap}, in Appendix~\ref{subsec:rodl-start}, and in Appendix~\ref{subsec:tail-parameters}.
+\end{remark*}
+\begin{contract}[Comb extraction]\label{con:comb}
+If \(0<\rho\le y\le2^{-8}\), \(H\) is \(y^3\)-sparse, and \(|H|\ge y^{-4}\), then either \(H\) is \(2y^4\)-sparse; or disjoint \(X,Z\) satisfy \(|X|\ge y^4|H|\), \(|Z|\ge(1-4y)|H|\), with \(Z\) directed \(\rho\)-sparse to \(X\); or there is a comb of integer length \(1/y\le\ell\le\rho^{-2}\), teeth of order at least \(y^4|H|/\ell^2\), roots full to their own teeth and anticomplete to the others, and a special vertex full to all teeth and anticomplete to all roots. All these sets and vertices are disjoint; root-root edges are unrestricted \cite[Lemma 2.10]{hjz}.
+\end{contract}
+\begin{contract}[Virality and perfection inputs]\label{con:viral}
+The EH property of a single graph implies its viral property \cite[Theorem 4]{bfp}. We normalize this in Appendix~\ref{app:terminal}. Weakly chordal graphs are perfect \cite{hayward}.
+\end{contract}
+The modular-decomposition facts used in Appendix~\ref{app:tooth} are stated there in the exact form required. The general Tooth lemma, the sampling lemmas, the layout argument, and the terminal product criterion are proved in the appendices.
+
+\Needspace{18\baselineskip}
+\part{Uniform template amplification and strong wonderfulness}
+
+\section{Two-labelled lifts and the forcing invariant}\label{sec:lift}
+Throughout Part I, fix \(h\ge2\), put \(s=h+1\), and assume that \(P_h\) has an all-orders EH exponent \(\kappa>0\).
+\begin{definition}
+For a graph \(Q\) on [\(q\)], a spanning subgraph \(M\) of \(Q\), and \(t\) in \{\(0,\allowbreak 1\)\}, define \(L_{t}(Q,\allowbreak M)\) on \(v,\allowbreak z_{1}\),...,\(z_{q},\allowbreak b_{1}\),...,\(b_{q}\): \(v z_{i}\) is an edge; \(v b_{i}\) is a nonedge; \(z_{i} b_{i}\) is an edge iff \(t=1\); for \(i\ne j,\allowbreak  z_{i} z_{j}\) and \(z_{i} b_{j}\) are edges iff \(ij\) is in \(Q\); \(b_{i} b_{j}\) is an edge iff \(ij\) is in \(M\). All graphs are simple; this specifies every pair.
+
+An \(r\)-arm is an induced \(r\)-vertex path whose first vertex has label \(z\) and whose remaining \(r-1\) vertices have label \(b\). It does not contain \(v\). Prepending \(v\) to an \(r\)-arm gives an induced \(P_{r+1}\).
+\end{definition}
+Put \(s=h+1\). We construct graphs \(Q_{r}\) for \(2\le\allowbreak r\le\allowbreak h\) such that: \((\ast)\) for every \(M \subseteq  Q_{r}\) and every \(t\) in \{\(0,\allowbreak 1\)\}, \(L_{t}(Q_{r},\allowbreak M)\) contains \(P_{s}\) or an \(r\)-arm. Consequently \(Q_{h}\) is a forcing template: every \(L_{t}(Q_{h},\allowbreak M)\) contains \(P_{s}\). The same graph \(Q_{h}\) works for both diagonal types \(t\). In fact it works when every diagonal \(z_{i} b_{i}\) is chosen independently: all arms constructed below are index-transversal, meaning that their vertices use distinct indices \(i\). The base arm has this property, and both inductive path constructions preserve it. No diagonal adjacency is ever used. We keep the constant-\(t\) notation below to match the usual wonderfulness convention.
+
+\section{Ramsey enlargement and multipartite homogenization}\label{sec:ramsey}
+\begin{lemma}[Vertex Ramsey enlargement]\label{lem:ramsey}
+Write \(A[B_{1},\allowbreak ...,\allowbreak B_{a}]\) for substitution, where \(a=|A|\): each vertex \(i\) of A is replaced by \(B_{i}\), and two replacement graphs are joined completely exactly when their corresponding vertices of A are adjacent.
+
+Let \(R(A,\allowbreak c)\) be the \(c\)-fold lexicographic power of A, for integer \(c\ge\allowbreak 1\): \(R(A,\allowbreak 1)=A\); \(R(A,\allowbreak c)=A[R(A,\allowbreak c-1),\allowbreak ...,\allowbreak R(A,\allowbreak c-1)]\). Every \(c\)-colouring of \(V(R(A,\allowbreak c))\) has a monochromatic induced A.
+\end{lemma}\begin{proof}
+By induction on \(c\). If some top-level fibre uses at most \(c-1\) colours, induction supplies a monochromatic A in that fibre. Otherwise every fibre uses all \(c\) colours. Choose one vertex of one fixed colour in each fibre; their quotient is an induced A. This also proves the claim when the colouring uses fewer than \(c\) colours.
+\end{proof}
+\begin{lemma}[Backward construction and forward selection]\label{lem:homogenize}
+Given a graph A and an integer \(h\ge\allowbreak 2\), define \(S_{h}\),...,\(S_{1}\) backwards: \(c_{i} = 2^{i-1 + \sum _{j>i}|S_{j}|}\); \(S_{i} = R(A,\allowbreak c_{i})\). In particular \(c_{h}=2^{h-1}\). Put \(H = P_{h}[S_{1},\allowbreak ...,\allowbreak S_{h}]\).
+
+For every spanning subgraph \(M\) of \(H\) there are induced copies \(A_{i}\) of A inside \(S_{i}\), for \(i=1\),...,\(h\), such that between every pair \(A_{i},\allowbreak A_{j}\) the \(M\)-relation is complete or anticomplete. The \(Q\)-relation (here \(Q=H\)) between consecutive fibres is complete, and between all other fibres is anticomplete.
+\end{lemma}\begin{proof}
+Choose \(A_{i}\) in increasing order of \(i\). At this stage each vertex in \(S_{i}\) has a single \(M\)-adjacency bit to each previously selected \(A_{j}\): this bit is well defined because all vertices of \(A_{j}\) were selected to have the same adjacency vector on every vertex in all later \(S_{k}\). Colour each vertex of \(S_{i}\) by these \(i-1\) bits and its adjacency vector on every vertex of \(S_{i+1} \cup \) ... \(\cup  S_{h}\). There are at most \(c_{i}\) colours. The vertex Ramsey property gives a monochromatic induced \(A_{i}\). It has uniform \(M\)-relation to each earlier \(A_{j}\), and its vertices have identical \(M\)-adjacencies to each individual later vertex. This preserves the induction invariant. At the end all pairs are homogeneous in \(M\), as required.
+
+No uniformity of \(M\) across the original fibres is assumed. This construction forces that uniformity on copies of the prescribed A.
+\end{proof}
+
+\section{Arm growth and positive substitution exponents}\label{sec:arm}
+\begin{proposition}[The forcing template]\label{prop:forcing}
+For each fixed \(h\ge2\), a finite graph \(Q_h\) can be constructed from \(P_h\) and \(P_2\) by substitution such that every two-labelled lift of \(Q_h\), including lifts with independent diagonal choices, contains an induced \(P_{h+1}\). The forcing path uses distinct indices apart from its unindexed root.
+\end{proposition}\begin{proof}
+Take \(Q_{2}=P_{2}\). For any \(M\) and either \(t,\allowbreak  z_{1},\allowbreak b_{2}\) is a \(2\)-arm, so \((\ast)\) holds.
+
+Suppose \(2\le\allowbreak r<h\) and \(Q_{r}\) has \((\ast)\). Apply Lemma~\ref{lem:homogenize} with \(A=Q_{r}\) and define \(Q_{r+1} = P_{h}[S_{1},\allowbreak ...,\allowbreak S_{h}]\). Consider an arbitrary \(M \subseteq  Q_{r+1}\), either \(t\), and suppose its lift contains no \(P_{s}\). Homogenize \(M\) on copies \(A_{1}\),...,\(A_{h}\) of \(Q_{r}\) by Lemma~\ref{lem:homogenize}. The induced lift on \(v\) together with the \(z/b\) vertices indexed by \(A_{i}\) is exactly \(L_{t}(Q_{r},\allowbreak M[A_{i}])\); hence every fibre has an \(r\)-arm.
+
+For each \(i=1\),...,\(h-1\), let \(e_{i}\) be \(1\) if \(M\) is complete between \(A_{i},\allowbreak A_{i+1}\), and \(0\) if it is anticomplete. We claim \(e_{1}\)=...=\(e_{r-1}=1\).
+
+Indeed, suppose \(e_i=0\) for some \(i\le r-1\). In fibre \(i\), choose an \(r\)-arm \(z,b_1,\ldots,b_{r-1}\). Choose any \(b\)-labelled vertex \(B\) in fibre \(i+1\), and one \(z\)-labelled vertex \(Z_j\) in each fibre \(j=i+2,\ldots,h\). The sequence
+\[
+ b_{r-1},\ldots,b_1,z,B,Z_{i+2},\ldots,Z_h
+\]
+is an induced path on \(r+h-i\ge h+1=s\) vertices. Its adjacencies and nonadjacencies follow from:
+\begin{itemize}
+\item the first \(r\) vertices form the reversed arm;
+\item \(B\) is adjacent to \(z\), since consecutive \(Q\)-fibres are complete;
+\item \(B\) is anticomplete to all \(b_j\) of the arm, since \(e_i=0\);
+\item \(B\) is adjacent to \(Z_{i+2}\), and the \(Z\)-tail follows \(P_h\);
+\item all remaining cross-pairs lie in nonconsecutive \(Q\)-fibres, and are nonedges of both \(Q\) and \(M\).
+\end{itemize}
+Taking \(s\) consecutive vertices gives an induced \(P_s\), a contradiction.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thus the first \(r-1 M\)-fibre pairs are complete. Select one \(z\)-labelled vertex \(Z\) in fibre \(r+1\) and one \(b\)-labelled vertex \(B_{i}\) in each fibre \(i=1\),...,\(r\). The path \(Z,\allowbreak B_{r},\allowbreak B_{r-1}\),...,\(B_{1}\) is an \((r+1)\)-arm. Consecutive \(b\)-pairs are adjacent by \(e_{i}=1\); every nonconsecutive pair is in nonconsecutive \(P_{h}\)-fibres and is a nonedge. The \(z\)-vertex is adjacent only to \(B_{r}\) among the selected \(b\)-vertices. Here \(r+1\le\allowbreak h\), so every required fibre exists. This proves \((\ast)\) for \(r+1\).
+
+Induction reaches \(Q_{h}\). A hypothetical \(P_{s}\)-free lift of \(Q_{h}\) would have an \(h\)-arm. Prepending \(v\) gives \(P_{h+1}=P_{s}\), the final contradiction.
+
+The forcing \(P_{s}\) is also index-transversal apart from the unindexed \(v\): when a fibre already supplies \(P_{s}\) this follows inductively, and both new path constructions use disjoint fibre indices. Thus the assertion with arbitrary individual diagonal values is proved simultaneously.
+
+
+\end{proof}
+\begin{lemma}[Quantitative one-vertex substitution]\label{lem:substitution}
+We use the following elementary quantitative substitution bound. If \(H,\allowbreak J\) have all-orders \(\operatorname{EH}\) exponents \(\gamma,\allowbreak \delta>0\) and \(|H|=a\), then \(H[u\leftarrow J]\) has the all-orders exponent \(\Phi(a,\allowbreak \gamma,\allowbreak \delta) = 1/(a+1/\delta+a/\gamma)\).
+\end{lemma}\begin{proof}
+Let \(G\) be \(H[u\leftarrow J]\)-free with \(n\) vertices and largest homogeneous set of size \(r\). Put \(m=\lfloor r^{1/\gamma}\rfloor+1\). If \(m>n\) the conclusion follows immediately. Otherwise every \(m\)-subset of \(V(G)\) contains \(H\). Counting such subsets yields at least \((n/m)^{a}\) induced \(H\)-copies. Choose an isomorphism for each copy. By fixing the \(a-1\) labelled core vertices other than \(u\), some common extension fibre has at least \(n/m^{a}\) vertices. Every extension has exactly the prescribed adjacency to the fixed core. This fibre is \(J\)-free, or else the fibre and core give \(H[u\leftarrow J]\). Hence its size is at most \(r^{1/\delta}\), and \(n \le\allowbreak  m^{a} r^{1/\delta} \le\allowbreak  2^{a} r^{a/\gamma+1/\delta} \le\allowbreak  r^{a+a/\gamma+1/\delta}\). The last step uses \(r\ge\allowbreak 2\) when \(n\ge\allowbreak 2\); \(n=1\) is immediate.
+\end{proof}
+This formula gives an explicit algorithm for every exponent used here: start with exponent \(1\) for \(Q_{2}=P_{2}\) and the input exponent \(\kappa\) for \(P_{h}\). For each substitution of a graph \(J\) into a vertex of the current graph \(H\), update its order to \(|H|-1+|J|\) and update its exponent using \(\Phi\). Apply this for the recursively defined lexicographic powers \(R(A,\allowbreak c)\), and then for \(P_{h}[S_{1},\allowbreak ...,\allowbreak S_{h}]\), in any fixed vertex order. All numbers are finite positive quantities, computable by the displayed recursion. Let \(q_{h}=|Q_{h}|\) and \(c_{h}>0\) be the resulting \(\operatorname{EH}\) exponent for \(Q_{h}\). Complementation preserves the same exponent.
+
+The constants are finite and depend only on \(h\) and the input exponent \(\kappa\).
+
+\section{Strong wonderfulness from the preceding path}\label{sec:wonder}
+\begin{theorem}[Uniform strong wonderfulness]\label{thm:wonder}
+Choose any integer \(a\ge \max (2 q_{h},\, 2+5/c_{h},\, 6)\). Let \(0<y<1/2\). Suppose \(F=\overline G\) is \(P_s\)-free, equivalently \(G\) is \(\overline{P_s}\)-free, and \(B_{1}\),...,\(B_{\ell}\) are pairwise disjoint nonempty blocks of common size \(W\), where \(\ell\ge\allowbreak y^{-a}\), and each pair is either complete or bidirectionally \(\theta\)-sparse, \(\theta=y^{a}\). Here directed \(\theta\)-sparse means that every vertex on the indicated side has at most \(\theta \cdot \) the other side's size neighbours. This is stronger than a weak density condition.
+
+Then one of the following holds.
+\begin{enumerate}[label=(\Alph*)]
+\item \(G\) contains a \(y^{4}\)-restricted set with cardinality at least \(W\).
+\item Some \(B_{i}\) has at most \(y|G|\) vertices outside the block union whose degree into \(B_{i}\) is strictly between \(0\) and \(W/2\).
+\end{enumerate}
+\end{theorem}\begin{proof}
+For an outside vertex \(u\) let \(I(u)\) consist of the blocks on which its degree is strictly between \(0\) and \(W/2\). Suppose \(|I(u)|>y \ell\). For each \(i\) in \(I(u)\), choose \(b_{i}\) adjacent to \(u\) in \(G\). More than \(W/2\) vertices of \(B_{i}\) are nonadjacent to \(u\). At least half of them have the same adjacency \(t_{i}\) to \(b_{i}\) in \(F=\overline{G}\). Let \(C_{i}\) be that set, so \(|C_{i}|>W/4\). Restrict to at least \(|I(u)|/2\) indices of one common type \(t\).
+
+Let \(J\) be their complete-pair graph in \(G\). We claim \(J\) is \(\overline{Q_{h}}\)-free. Otherwise select \(q_{h}\) blocks whose complete-pair graph is \(\overline{Q_{h}}\). For every edge \(ij\) of \(Q_{h}\) the corresponding blocks are \(\theta\)-sparse in \(G\). Choose \(z_{i}\) in \(C_{i}\) one by one, avoiding \(G\)-neighbours of every \(b_{j}\) and of all previously chosen \(z_{j}\) across such pairs. At each step at most \(2(q_{h}-1)\theta W\) vertices are forbidden, which is less than \(W/4\) because \(a\ge\allowbreak 2q_{h}\) and \(y<1/2\). Thus every choice is possible.
+
+In \(F\) the selected vertices \(u,\allowbreak z_{i},\allowbreak b_{i}\) realize \(L_{t}(Q_{h},\allowbreak M)\), where \(M\) is the graph of \(F\)-edges among the \(b_{i}\). It is a spanning subgraph of \(Q_{h}\): a nonedge \(ij\) of \(Q_{h}\) corresponds to a complete block pair in \(G\). Proposition~\ref{prop:forcing} forces \(P_{s}\) in \(F\), contrary to the hypothesis. This proves the claim.
+
+By \(\operatorname{EH}\) for \(\overline{Q_{h}}\), \(J\) has a homogeneous set of size at least \((|I(u)|/2)^{c_{h}} > (y \ell/2)^{c_{h}} \ge\allowbreak  2 y^{-4}\). The final inequality follows from \(a\ge\allowbreak 2+5/c_{h}\) and \(y<1/2\). Let \(r\ge\allowbreak 2 y^{-4}\) be its cardinality, and \(S\) the union of those blocks. If the pairs are complete, the maximum degree in \(F[S]\) is at most \(W-1\). If the pairs are sparse, the maximum degree in \(G[S]\) is at most \(W-1+(r-1)\theta W\). In either case it is at most \((1/r+\theta)|S|-1 \le\allowbreak  (y^{4}/2+y^{6})|S|-1 \le\allowbreak  y^{4}(|S|-1)\). Hence \(S\) is \(y^{4}\)-restricted and \(|S|\ge\allowbreak W\), giving \((A)\).
+
+If \((A)\) fails, every outside \(u\) has \(|I(u)|\le\allowbreak y \ell\). Counting incidences between outside vertices and blocks shows that some block receives at most \(y|G|\) incidences, proving \((B)\).
+\end{proof}
+
+
+\Needspace{18\baselineskip}
+\part{The fixed-target structural implication}
+
+\section{One ambient class and a quantified rooted contract}\label{sec:ambient}
+\begin{theorem}[Fixed-target implication]\label{thm:step}Fix \(s\ge7\). Assume \(\EH(P_{s-1})\) and the strong-wonderfulness statement \(W_s\) of Theorem~\ref{thm:wonder} for \(\overline{P_s}\)-free graphs, with some fixed exponent \(a_s\ge6\). Then \(\EH(P_s)\) holds.\end{theorem}
+Set \(\mathcal{A}_{s}=\operatorname{Forb}(P_{s})\), in the \(F\) orientation, and write \(G=\overline{F}\). Let \(E_{r}\) be the hereditary class of graphs with an order in which the first vertex of every induced \(P_{r}\) is not an endpoint.
+
+Write \(T_{r}^{(s)}\) for the following quantified rooted Tooth statement. There are positive constants \(A_{r},\allowbreak e_{r},\allowbreak c_{r},\allowbreak k_{r},\allowbreak d_{r},\allowbreak E_{r}^{*},\allowbreak \eta_{r}\) such that, whenever \(0<x\le\allowbreak y\le\allowbreak \eta_{r},\allowbreak  |Y|=n\ge\allowbreak x^{-E_{r}^{*}}\), and \(U\) is outside \(Y\) in a host \(F\) in \(\mathcal{A}_{s}\) with every \(u\) having \(\operatorname{RP}_{r}\) into the original \(Y\), at least one of the following exists: \((T_{1})\) a core \(S\subseteq Y\) with \(|S|\ge y^{A_{r}} n\), such that every \(u\in U\) is complete to \(S\) in \(G\) or has strictly fewer than \(x|S|/4\) \(G\)-neighbours in \(S\); \((T_{2})\) a \(z^{4}\)-restricted set \(T\subseteq Y\) of size at least \(z^{e_{r}} n\) for some \(x^{c_{r}}\le\allowbreak z\le\allowbreak y\); \((T_{3})\) a directed \(x\)-semisparse blockade in \(Y\) of integer length \(K\) with \(1/y\le K\le x^{-k_{r}}\) and width at least \(n/K^{d_{r}}\).
+
+The entire host, including original roots, stays \(P_{s}\)-free in the \(F\) orientation. Each lower Tooth call takes an induced subhost. The superscript \(s\) remains the same throughout the induction.
+
+The already proved, ambient-independent \(\operatorname{RP}_{5}\) Tooth supplies \(T_{5}^{(s)}\) for every \(s\), with \(A_{5}=26,\allowbreak  e_{5}=18,\allowbreak  c_{5}=1,\allowbreak  k_{5}=140,\allowbreak  d_{5}=64,\allowbreak  E_{5}^{*}=600,\allowbreak  \eta_{5}=2^{-16}\). Its fixed \(y^{4}\)-restricted output is a valid \(T_{2}\) output at \(z=y\). This base theorem does not use \(\operatorname{EH}(P_{s}),\allowbreak  \operatorname{EH}(P_{s-1})\), or \(\operatorname{EH}(E_{5})\).
+The RP5 contract is developed in Appendix~\ref{app:rp5}, with its general Tooth proof in Appendix~\ref{app:tooth} and its thin-layer argument in Appendix~\ref{app:thin}.
+
+\section{Ordered-tail transfer without circularity}\label{sec:tail}
+Assume \(T_{r}^{(s)}\) has been proved. The transfer argument in Appendix~\ref{app:tail} first proves generalized niceness for \(C_{r,s}=\co(E_{r}\cap\mathcal{A}_{s})\).
+
+The structural step is direct. In a \(y^{3}\)-sparse \(G\) in this class, take the last \(\lceil yn\rceil\) vertices of an \(E_{r}\) order as the target \(Y\). Every earlier vertex has \(\operatorname{RP}_{r}\) into \(Y\). Applying \(T_{r}^{(s)}\) gives the variable-scale local oracle of Hypothesis~\ref{hyp:oracle} for the hereditary class \(\mathcal C=C_{r,s}\) and \(h=s\), with constants \(a=\max (4,\allowbreak A_{r}+1),\allowbreak  b=3,\allowbreak  c=\max (2,\allowbreak c_{r},\allowbreak k_{r}),\allowbreak  d=d_{r}+1,\allowbreak  e=\max (4,\allowbreak e_{r}+1),\allowbreak  L=E_{r}^{*}+2\). The clean outcome has a large directed sparse residual because at most \(y^{3} n\) earlier roots can be complete to its nonempty core. The restricted outcome retains its actual \(z\) and has width \(z^{e_{r}} |Y|\ge\allowbreak z^{e_{r}+1}n\). The blockade width is at least \(n/K^{d_{r}+1}\); this blockade is directed semisparse, hence weakly semisparse as output \((O_{2})\) requires.
+
+The variable-scale bootstrap (Theorem~\ref{thm:bootstrap}) and the arbitrary-pattern layout (Lemma~\ref{lem:layout}) prove niceness for \(C_{r,\allowbreak s}\) from this oracle, without using either \((\operatorname{EH})\) or \((W)\). Then \((\operatorname{EH})\), via normalized \(P_{s-1}\) virality, supplies the sparse \(P_{s}\)-free leaf-fibre step. Together with \((W)\) and the proved terminal product argument, this niceness gives \(\operatorname{EH}(E_{r} \cap  \mathcal{A}_{s})\).
+
+Thus \(T_{r}^{(s)} + (\operatorname{EH}) + (W)\Longrightarrow\operatorname{EH}(E_{r} \cap  \mathcal{A}_{s})\). No assertion of \(\operatorname{EH}(P_{s})\) occurs on the right-hand side of an input. No virality theorem for the possibly infinitely defined class \(E_{r}\) is invoked: only virality of the single graph \(P_{s-1}\) is used.
+
+
+\section{Induction through rooted orders}\label{sec:rooted}
+If \(s=7,\allowbreak  T_{5}^{(s)}\) is already the final rooted order needed.
+
+For \(s\ge\allowbreak 8\), apply Section~\ref{sec:tail} to \(r=5\). It gives \(\operatorname{EH}(E_{5} \cap  \mathcal{A}_{s})\). The fixed-ambient variant in Appendix~\ref{subsec:rp6-relative} then gives \(T_{6}^{(s)}\). Its use of the original \(\operatorname{RP}_{4}\) Tooth is included in the specialized frontier proof; it does not require a nonexistent uniform \(\operatorname{RP}_{4}\) contract.
+
+For every subsequent \(q=7\),...,\(s-2\), assume \(T_{q-1}^{(s)}\) and \(T_{q-2}^{(s)}\) already proved. Section~\ref{sec:tail}, applied to \(r=q-1\), gives \(\operatorname{EH}(E_{q-1} \cap  \mathcal{A}_{s})\), with some positive exponent. Apply the recurrence of Appendix~\ref{subsec:rpq-recurrence} with this fixed hereditary ambient class \(\mathcal{A}_{s}\). Its two preparatory purifications use \(T_{q-1}^{(s)}\); its offending-pair purification uses \(T_{q-2}^{(s)}\). Its negative transversals belong to \(E_{q-1} \cap  \mathcal{A}_{s}\) and have the required \(\operatorname{EH}\) exponent.
+
+For clarity, that recurrence provides explicit finite next constants. Enlarge the two lower contracts to common constants \(A_{0},\allowbreak e_{0},\allowbreak d_{0},\allowbreak c_{0},\allowbreak k_{0},\allowbreak E_{0}\ge\allowbreak 1\) and common cutoff \(\eta_{0}\). Set \(J_{0}=4A_{0}+11,\allowbreak  H=c_{0} J_{0},\allowbreak  J=k_{0} J_{0},\allowbreak  Q=E_{0} J_{0},\allowbreak  m_{0}=\max (2^{16},\allowbreak \lceil 1/\eta_{0}\rceil),\allowbreak  h=\max (2,\allowbreak 1/\kappa),\allowbreak  d_{t}=\lceil 4h+5\rceil,\allowbreak  C_{\mathrm{tree}}=6d_{t}+3\). One may take \(A_{q}=6d_{t}+2,\allowbreak  c_{q}=H(C_{\mathrm{tree}}+1),\allowbreak  e_{q}=\max (e_{0}+2A_{0}+7,\allowbreak 8h+d_{t}+10),\allowbreak  k_{q}=J(C_{\mathrm{tree}}+1),\allowbreak  d_{q}=9A_{0}+d_{0}+21,\allowbreak  E_{q}^{*}=Q+(Q+6)C_{\mathrm{tree}}+1,\allowbreak  \eta_{q}=\min (2^{-16},\allowbreak 2^{-(h+10)},\allowbreak 1/m_{0})\), where \(\kappa\) is the just-proved \(\operatorname{EH}\) exponent of \(E_{q-1} \cap  \mathcal{A}_{s}\). These are the constants \eqref{eq:rpq-frontier-constants}, \eqref{eq:rpq-tree-constants} and \eqref{eq:rpq-new-constants} of Appendix~\ref{app:rpq}; the letter \(h\) has this local meaning only here and there.
+
+Every representative and every witness is an original host vertex. The prefix \(r\text{-}z\) before a representative creates the rooted \(P_{q-2}\)-exclusion needed for the third pass. The threshold strictly below one preserves original full/sparse types after shrinking. All restricted early outputs keep their actual \(z\); all order and width losses are absorbed into the displayed finite exponents.
+
+This finite induction proves \(T_{s-2}^{(s)}\). No theorem established only in a smaller ambient forbidden-path class has been reused.
+
+
+\section{The final comb oracle}\label{sec:comb}
+Write the final \(T_{s-2}^{(s)}\) constants as \(A,\allowbreak e,\allowbreak c,\allowbreak k,\allowbreak d,\allowbreak E,\allowbreak \eta\). Let \(F=\overline G\) be \(P_s\)-free, equivalently let \(G\) be \(\overline{P_s}\)-free, and suppose \(G\) is \(y^3\)-sparse, with \(0<\rho\le\allowbreak y\le\allowbreak \min (\eta,\allowbreak 2^{-8}),\allowbreak  |G|=n\ge\allowbreak \rho^{-(3E+10)}\).
+Apply Contract~\ref{con:comb}, namely \cite[Lemma 2.10]{hjz}, with \(H=G\). Its order hypothesis holds since
+\(n\ge\rho^{-(3E+10)}\ge\rho^{-4}\ge y^{-4}\). It gives one of:
+\((O_{1})\) \(G\) is \(2y^{4}\)-sparse; \((O_{3})\) disjoint \(X,\allowbreak Z\) with \(|X|\ge\allowbreak y^{4}n,\allowbreak  |Z|\ge\allowbreak (1-4y)n\), and \(Z\) directed \(\rho\)-sparse to \(X\); or a comb of integer length \(1/y\le\allowbreak \ell\le\allowbreak \rho^{-2}\), teeth \(B_{i}\) of size at least \(y^{4}n/\ell^{2}\), roots \(a_{i}\) full to their own tooth and anticomplete to all other teeth, and a special vertex \(v\) full to all teeth and anticomplete to all roots. The sets, roots and \(v\) are disjoint.
+
+Every vertex \(u\) of a different original tooth has \(\RP_{s-2}\) into \(B_{i}\). Otherwise a rooted induced \(F\text{-}P_{s-2}\) from \(u\) inside \(B_{i}\), prefixed by \(v,\allowbreak a_{i}\), would be an induced \(F\text{-}P_{s}\). The two new consecutive \(F\)-edges are \(v\text{-}a_{i}\) and \(a_{i}\text{-}u\). All new nonconsecutive pairs are absent in \(F\), since \(v\) is \(G\)-full to every tooth and \(a_{i}\) is \(G\)-full to \(B_{i}\).
+
+Apply \(T_{s-2}^{(s)}\) to each tooth, with all vertices of the other original teeth as roots, at fine \(\rho^{3}\) and coarse \(1/\ell\). These parameters and the input orders are legal: \(\rho^{3}\le\allowbreak \rho^{2}\le\allowbreak 1/\ell\le\allowbreak y\le\allowbreak \eta,\allowbreak  |B_{i}|\ge\allowbreak \rho^{8} n\ge\allowbreak \rho^{-3E}\). For width estimates use the separate inequality \(|B_{i}|\ge\allowbreak n/\ell^{6}\).
+
+A restricted output retains \(z\) in [\(\rho^{3c},\allowbreak 1/\ell\)] and has size \(z^{e} |B_{i}|\ge\allowbreak z^{e+6}n\). A blockade output is directed \(\rho^{3}\)-semisparse, hence directed \(\rho\)-semisparse; it has \(1/y\le\allowbreak \ell\le\allowbreak K\le\allowbreak \rho^{-3k}\) and width at least \(n/K^{d+6}\).
+
+If all teeth give clean cores, their sizes are at least \(n/\ell^{A+6}\), and every vertex in either core is full or \(\theta\)-sparse toward the other, \(\theta=\rho^{3}/4\). For an incomplete pair choose a nonedge \(pq\), with \(p\) in the first core and \(q\) in the second. Both endpoints have sparse type. Any vertex of the first core full to the second is adjacent to \(q\); hence such vertices form fewer than \(\theta \cdot \) the first core size. Counting them and the remaining sparse vertices gives edge density less than \(2\theta\le\allowbreak \rho\). Thus the clean cores themselves give a weakly \(\rho\)-semisparse blockade of length \(\ell\) and width at least \(n/\ell^{A+6}\). It need not be directed \(\rho\)-semisparse: the edge count does not bound the degrees of the few full-type vertices.
+
+The final local oracle therefore has constants \(a_{\mathrm{or}}=4,\allowbreak  b_{\mathrm{or}}=4,\allowbreak  c_{\mathrm{or}}=\max (2,\allowbreak 3c,\allowbreak 3k),\allowbreak  d_{\mathrm{or}}=\max (d+6,\allowbreak A+6),\allowbreak  e_{\mathrm{or}}=\max (4,\allowbreak e+6),\allowbreak  L_{\mathrm{or}}=3E+10\). This is Hypothesis~\ref{hyp:oracle} for the hereditary class \(\mathcal C=\Forb(\overline{P_s})\) and \(h=s\): the comb extraction and \(T_{s-2}^{(s)}\) apply in every \(\overline{P_s}\)-free graph, so the same outputs are available in every member of \(\mathcal C\). Its blockade output is \((O_{2})\) in the weak sense of that hypothesis. A \((T_{3})\) blockade is directed, hence weakly, \(\rho\)-semisparse, while the all-clean branch supplies weak \(\rho\)-semisparsity only.
+
+
+\section{Generalized niceness and the terminal conclusion}\label{sec:conclusion}
+Apply Theorem~\ref{thm:bootstrap} with \(\mathcal C=\Forb(\overline{P_s})\) and \(h=s\). Its minimum admissible scale ranges down to \(\rho^{2c_{\mathrm{or}}}\), so an actual restricted scale \(z\) as small as \(\rho^{c_{\mathrm{or}}}\) causes no loss of validity. In the sparse direction the new scale is \(z^{7/6}\); in the opposite direction Contract~\ref{con:path} for \(P_{s}\), with parameter \(z^{2}\), gives a complete blockade; its order hypothesis is verified in the proof of Theorem~\ref{thm:bootstrap}. Fixed R\"odl and the proved layout argument supply constants \(M,\allowbreak N\) with, for every \(\overline{P_{s}}\)-free \(G\) and every \(0<\varepsilon<1/2\), either \(\hom (G)\ge\allowbreak \varepsilon^{M}|G|\) or a blockade of length \(\lceil 1/\varepsilon\rceil\), width \(\varepsilon^{N}|G|\), whose pairs are complete or weakly \(\varepsilon^{8}\)-sparse.
+
+The terminal argument in Appendix~\ref{app:terminal} uses only hereditary niceness, \(\overline{P_s}\)-freeness, \(\EH(P_{s-1})\), and \(W_s\). It applies to the whole \(\overline{P_s}\)-free class as well as to the relative class \(C_{r,s}\).
+
+
+
+
+More explicitly, normalize \(P_{s-1}\) virality with exponent \(v\ge\allowbreak 1\) and put \(P=\max (M,\allowbreak N+3),\allowbreak  A_{\mathrm{term}}=\max (a_{s} P,\allowbreak 4(s-1)v+4,\allowbreak 4),\allowbreak  c_{T}=y_{T}=2^{-4s},\allowbreak  d_{T}=2A_{\mathrm{term}}+4\). The sparse \(P_{s}\)-free leaf-fibre step has residual loss at most \((s-1)y\). In the other orientation, weak-blockade cleanup followed by \((W)\) gives the required restricted output or a large pure residual pair. The fixed-orientation residual chain survives a constant fraction, since \(\exp (-2(s-1))>c_{T}\).
+
+Let \(\delta_{T}\) be the fixed R\"odl fraction for \(\overline{P_{s}}\) at precision \(c_{T}y_{T}\), and put \(D_{s}=d_{T}+\lceil \log _{2}(1/\delta_{T})\rceil\). These are the constants \eqref{eq:term-constants}--\eqref{eq:term-D} of Appendix~\ref{app:terminal}, where \(A_{\mathrm{term}},c_{T},y_{T},d_{T}\) are abbreviated to \(A,c,y_0,d\). Lemma~\ref{lem:product} yields \(\hom (G)\ge\allowbreak |G|^{1/(8D_{s})}\) for every \(\overline{P_{s}}\)-free graph \(G\). Homogeneous size is invariant under complementation, so the same bound holds for every \(P_{s}\)-free graph \(F\). This is the Erd\H{o}s--Hajnal property of \(P_{s}\).
+
+\section{The induction on path length}\label{sec:assembly}
+\begin{proof}[Proof of Theorem~\ref{thm:target}]
+Theorem A of \cite{p6} supplies \(\EH(P_6)\). For a fixed \(s\ge7\), assume \(\EH(P_{s-1})\). Theorem~\ref{thm:wonder}, with \(h=s-1\), supplies \(W_s\), and Theorem~\ref{thm:step} supplies \(\EH(P_s)\). Induction therefore gives \(\EH(P_s)\) for every fixed \(s\ge6\). For \(2\le s<6\), every \(P_s\)-free graph is \(P_6\)-free, since an induced \(P_6\) contains an induced \(P_s\). For \(s=1\), no nonempty graph is \(P_1\)-free, so the assertion is vacuous. Complementation interchanges cliques and stable sets and preserves \(\hom\), giving the complementary conclusion.
+\end{proof}
+The exponent obtained in this way depends on \(s\); no common exponent for all path lengths is asserted.
+\clearpage\appendix
+
+
+\Needspace{8\baselineskip}
+\section{The general Tooth lemma and modular decomposition}\label{app:tooth}
+
+
+
+\begin{lemma}[General Tooth with actual integer lengths]\label{lem:tooth}
+Let \(0<\xi\le\allowbreak 2^{-20}\), let \(k\) be an integer with \(2^{16}\le\allowbreak k\le\allowbreak 2\xi^{-1/2}\), and let \(|Y|=V\ge\allowbreak 16\xi^{-3}\). Suppose \(U\) is outside \(Y\) and, for every \(u\) in \(U\), each anticomponent of \(G[N(u) \cap  Y]\) is a module of \(G[Y]\). Then at least one of the following exists:
+\begin{enumerate}[label=TL\arabic*:,leftmargin=3.4em]
+\item a pure blockade of integer length \(K\) with \(k^{1/4}\le K\le 1/\xi\) and width at least \(V/K^{4}\);
+\item a pure blockade of integer length \(K\) with \((8K)^{4}\le k^{3}\le (9K)^{4}\) and width at least \(V/(2k)\);
+\item a complete or anticomplete blockade of integer length \(K=\lfloor 1/\xi\rfloor\) and width at least \(\xi^{2} V/k\);
+\item a complete blockade of integer length \(K=\lfloor 1/(\xi k)\rfloor\) and width at least \(\xi^{3} V/4\);
+\item a set \(S \subseteq Y\) with \(|S|\ge V/k\) such that every \(u\in U\) is complete to \(S\) or has fewer than \(\xi|S|/4\) neighbours in \(S\).
+\end{enumerate}
+
+
+\end{lemma}
+
+\begin{proof}
+We use the standard modular-decomposition facts in their precise form. Strong modules form a rooted inclusion tree whose children partition each non-singleton node. Distinct disjoint modules are complete or anticomplete to one another. At an internal node the quotient on its children is complete, edgeless, or prime. In the first two cases its children are respectively anticomponents or components. At a prime node, every proper module contained in the node lies in a single child. An arbitrary module and a strong module are disjoint or nested. All these assertions concern modular decomposition of the given graph; none assumes a forbidden \(P_{6}\) or \(P_{7}\).
+
+The hypotheses force \(\xi\le 2^{-30}\), since \(2^{16}\le k\le 2\xi^{-1/2}\); every application in this paper has \(\xi\le 2^{-32}\). Use the notation \(\xi,\allowbreak k,\allowbreak Y,\allowbreak V\) of the general Tooth contract and write \(n=V\). The symbol \(s_{\mathrm{cut}}\) denotes a local size cutoff here and in Appendices~\ref{app:rp5}, \ref{app:rp6} and \ref{app:rpq}; it is unrelated to the target path order \(s\). Set \(s_{\mathrm{cut}}=\xi^{2} n/4,\allowbreak  t=n/k,\allowbreak  K_{1}=\lfloor 1/\xi\rfloor\). The parameter range gives \(k^{2} \xi\le\allowbreak 4\) and \(\xi k\le\allowbreak 2\xi^{1/2}\le\allowbreak 2^{-9}\). In particular \(s_{\mathrm{cut}}\ge\allowbreak 4/\xi>1\) and \(s_{\mathrm{cut}}\le\allowbreak t\).
+
+Let \(L\) be the strong modules of \(G[Y]\) having at least \(s_{\mathrm{cut}}\) vertices. An atom is a child of a member of \(L\) that is not itself in \(L\). For \(N\) in \(L\) let \(S(N)\) be the union of its atom children. The sets \(S(N)\) partition \(Y\): for each vertex, its lowest ancestor in \(L\) has an atom child containing it. Distinct such atom layers cannot overlap by the tree nesting.
+
+We need two additional consequences of the standard facts. First, each anticomponent A of \(N_{G}(u) \cap  Y\) is a module by hypothesis. For a strong node \(N\), either A contains \(N\), misses \(N\), or is properly contained in \(N\); in the last case, if \(N\) is a prime node, A lies in a single child of \(N\). Second, for nested retained nodes \(N\) properly containing \(N',\allowbreak  S(N)\) misses \(N'\), and every vertex outside \(N'\) is complete or anticomplete to \(N'\), because \(N'\) is a module.
+\subsection{An elementary antichain estimate}
+Suppose \(2\le K_{0}\le K_{1}\), and \(\mathcal F\) is a family of sets, each of size at most \(M\). Suppose that for every integer \(K\in[K_{0},K_{1}]\) fewer than \(K\) members of \(\mathcal F\) have size at least \(n/K^{4}\). Then
+\begin{equation}\label{eq:antichain}
+ \sum_{A\in\mathcal F}|A|\le (K_{0}-1)M+\frac{n}{K_{0}-1}+\frac{|\mathcal F|\,n}{K_{1}^{4}}.
+\end{equation}
+Indeed, fewer than \(K_{0}\) sets reach \(n/K_{0}^{4}\). For each \(K_{0}\le K<K_{1}\), at most \(K\) sets have size in \([n/(K+1)^{4},n/K^{4})\), contributing at most \(n/K^{3}\). The remaining sets each contribute less than \(n/K_{1}^{4}\). Finally \(\sum _{K\ge K_{0}}K^{-3}\le \sum _{K\ge K_{0}}(1/(K-1)-1/K)=1/(K_{0}-1)\).
+
+Let \(K_{0}\) be the least integer with \(K_{0}^{4}\ge\allowbreak k\) and put \(a=K_{0}-1\). Then \(a\ge\allowbreak 15,\allowbreak  a^{4}<k\), and \(K_{0}\le\allowbreak K_{1}\). To check the last assertion, \(a^{8} \xi<k^{2} \xi\le\allowbreak 4\) and \(a^{7}\ge\allowbreak 8\) imply \(8a \xi<4\); hence \((a+1)\xi\le\allowbreak 2a \xi<1\).
+\subsection{Find a heavy chain}
+Call nodes of \(L\) of size at least \(t\) heavy. Minimal heavy nodes are pairwise disjoint modules. If at least \(K_{0}\) exist, they form a pure \((K_{0},\allowbreak n/K_{0}^{4})\)-blockade, giving TL1. Otherwise there are at most \(a\) minimal heavy nodes.
+
+The maximal nonheavy nodes have sizes in [\(s_{\mathrm{cut}},\allowbreak t\)) and there are at most \(n/s_{\mathrm{cut}}\) of them. If \(K\) of them have size at least \(n/K^{4}\) for some \(K_{0}\le\allowbreak K\le\allowbreak K_{1}\), they give TL1. Otherwise \eqref{eq:antichain} yields total size at most \(an/k+n/a+(n/s_{\mathrm{cut}})n/K_{1}^{4} \le\allowbreak n/a^{3}+n/15+64\xi^{2} n \le\allowbreak (1/3375+1/15+2^{-34})n\le\allowbreak n/4\). All nonheavy layers lie in these maximal nonheavy nodes. Thus the heavy-node layers have total size at least \(3n/4\). Every heavy node contains a minimal heavy node. Summing layer masses on ancestor chains above the at most \(a\) minimal heavy nodes, some chain \(C\) has total layer mass at least \(3n/(4a)\).
+\subsection{A thick layer gives an early output or the clean core}
+Suppose a node \(N\) on \(C\) has \(|S(N)|\ge\allowbreak t\); put \(S=S(N)\). If \(G[N]\) is disconnected, the components of \(G[S]\) are atom children, each smaller than \(s_{\mathrm{cut}}\). Since \(s_{\mathrm{cut}}\le\allowbreak \xi t\le\allowbreak \xi|S|\le\allowbreak |S|/K_{1}\), grouping components gives an anticomplete length-\(K_{1}\) blockade of width at least \(|S|/K_{1}^{2}\ge\allowbreak \xi^{2} n/k\), giving TL3. If the complement of \(G[N]\) is disconnected, the same argument gives a complete blockade and again TL3.
+
+The remaining case is a prime modular-decomposition node. Put \(K'=\lfloor 1/(\xi k)\rfloor\ge\allowbreak 2\). Suppose some \(u\) in \(U\) is not complete to \(S\) but has \(r\ge\allowbreak \xi|S|/4\) neighbours in \(S\). Every anticomponent A of \(N_{G}(u) \cap  Y\) that meets \(S\) is properly contained in \(N\): otherwise it would contain \(N\) and \(u\) would be complete to \(S\). Since \(N\) is prime, A lies in one child. Because it meets \(S\), that child is an atom, so A is contained in \(S\) and has size less than \(s_{\mathrm{cut}}\). Consequently the anticomponents of \(N_{G}(u) \cap  S\) all have size less than \(s_{\mathrm{cut}}\). Moreover \(r/K'\ge\allowbreak r \xi k\ge\allowbreak \xi t \xi k/4=s_{\mathrm{cut}}\). Grouping these anticomponents gives a complete length-\(K'\) blockade with width \(r/K'^{2}\ge\allowbreak \xi t(\xi k)^{2}/4\ge\allowbreak \xi^{3} n/4\), which is TL4. If no such \(u\) exists, \(S\) itself satisfies TL5 and \(|S|\ge\allowbreak t=n/k\).
+\subsection{All chain layers are thin}
+Assume instead \(|S(N)|<t\) for every \(N\) on \(C\). Let \(K\) be the largest integer satisfying \((8K)^{4}\le\allowbreak k^{3}\). Then \(K\ge\allowbreak 8\), and \(k^{3}<(8K+8)^{4}\le\allowbreak (9K)^{4}\). Also \((8Ka)^{4}\le\allowbreak k^{3}a^{4}<k^{4}\), so \(8Ka<k\); in particular \(2Kt\le 3n/(4a)\), no larger than the chain's total layer mass.
+
+For \(N\) on \(C\), let \(P_{N}\) be cumulative layer mass from the top through \(N\). For \(j=0\),...,\(K-1\) let \(\Gamma_{j}\) be the union of layers with \(2jt<P_{N}\le 2(j+1)t\). Since each layer has size less than \(t\), the cumulative mass at any threshold \(\theta\) lies in (\(\theta-t,\allowbreak \theta\)]. Therefore every \(\Gamma_{j}\) has more than \(t\) vertices.
+
+Every vertex \(v\) outside a chain node is complete or anticomplete to that node. Its choice is the same for every chain node omitting it: if \(v\) is anticomplete to one such node, nesting and the module property force it to be anticomplete to all of them. Call \(v\) type \(1\) if it is complete to all those nodes and type \(0\) otherwise. For \(j<j'\), a vertex in \(\Gamma_{j}\) sees a vertex in \(\Gamma_{j'}\) precisely when the earlier vertex has type \(1\). Retain a majority type within each \(\Gamma_{j}\). The retained sets each have size at least \(t/2=n/(2k)\) and form a pure blockade of actual length \(K\) with \((8K)^{4}\le\allowbreak k^{3}\le\allowbreak (9K)^{4}\). This is TL2.
+
+All possibilities have yielded TL1--TL5. This proves the general Tooth lemma, including its actual integer length contracts.
+\end{proof}
+
+\Needspace{8\baselineskip}
+\section{Thin layers with perfect partial transversals}\label{app:thin}
+
+
+
+\begin{lemma}
+Suppose a set of size \(M\) is partitioned into nonempty layers \(A_i\), every partial transversal induces a perfect graph, and
+\[
+ \lambda=\frac{\max_i|A_i|}{M}\le\frac{\varepsilon^4}{128},
+ \qquad 0<\varepsilon\le2^{-16}.
+\]
+Then it contains a set \(T\) of size at least \(\varepsilon^2M/512\) such that \(G[T]\) or its complement has maximum degree at most \(\varepsilon(|T|-1)\). In particular \(T\) is \(\varepsilon\)-restricted.
+\end{lemma}
+\begin{proof}
+Put \(q=\lceil\varepsilon^{-2}\rceil\), \(t=q^2\), and \(\delta=1/(256q)\). Since \(q\le2\varepsilon^{-2}\), we have \(\lambda\le1/(32q^2)\); since \(\lambda\ge1/M\), we have \(M\ge32q^2\).
+
+A uniform \(2t\)-subset has expected number of colliding same-layer pairs less than \(2t^2\lambda\le t/16\). At least half of these samples have at most \(t\) collisions. Deleting at most one vertex per collision leaves at least \(t\) vertices in distinct layers. A perfect graph on \(t=q^2\) vertices has \(\alpha\omega\ge t\), hence has a homogeneous \(q\)-set. Double counting gives at least
+\[
+ \frac12\frac{\binom{M}{2t}}{\binom{M-q}{2t-q}}
+ \ge\frac12\left(\frac M{2t}\right)^q
+\]
+homogeneous \(q\)-subsets. One type contributes at least \(\tfrac14(M/(2t))^q\); suppose it is the stable-set type.
+
+Assume no set of size at least \(\delta M\) is \(\varepsilon\)-restricted, even with the stronger degree convention \(\varepsilon(|S|-1)\). Put
+\[
+ u=\lceil\delta M\rceil\le2\delta M,\qquad
+ r=\lceil\varepsilon^{-1}\ln(1/\delta)\rceil.
+\]
+Every set \(R\) with \(|R|\ge u\) has maximum degree greater than \(\varepsilon(|R|-1)\).
+
+The required elementary container count is
+\[
+ I_q\le\binom Mr\binom u{q-r}.
+\]
+Fix tie-breaking orders. To encode a stable \(q\)-set \(I\), repeatedly inspect a vertex of maximum degree in the graph induced on the current candidate set \(R\). If it belongs to \(I\), record it and delete its closed neighbourhood; otherwise delete that vertex alone. Stop when at most \(u\) candidates remain. While \(|R|>u\), a recorded choice deletes more than \(\varepsilon(|R|-1)+1\) vertices, hence leaves fewer than \((1-\varepsilon)|R|\) candidates; so at most \(r\) choices are recorded, because \((1-\varepsilon)^rM\le\delta M\le u\). Pad the recorded set to size \(r\) with remaining members of \(I\) if necessary. From this \(r\)-set the deterministic algorithm can be replayed, and the other \(q-r\) members lie in a container of size at most \(u\). This proves the count once \(r\le q\), as verified below. If \(u<q-r\), the upper bound is zero.
+
+Using \(\binom qr\le2^q\) and \(q!\ge(q/e)^q\), comparison gives
+\begin{align*}
+ \frac14\left(\frac M{2t}\right)^q
+ &\le\frac{M^q(2\delta)^{q-r}}{r!(q-r)!}\\
+ &\le M^q(2\delta)^{q-r}\left(\frac{2e}q\right)^q.
+\end{align*}
+Thus
+\[
+ \left(\frac1{2\delta}\right)^{1-r/q}
+ \le4e\frac tq\,4^{1/q}\le8eq.
+\]
+Write \(L=\ln(1/\varepsilon)\ge16\ln2\). Then \(\ln(256q)\le3L\) and \(r\le3\varepsilon^{-1}L+1\), so
+\[
+ \frac rq\ln(128q)\le9\varepsilon L^2+3\varepsilon^2L<1,
+ \qquad r<q.
+\]
+The preceding inequality implies
+\[
+ 128q=\frac1{2\delta}<8e^2q<128q,
+\]
+a contradiction. For the other homogeneous type, use the complement. Finally \(\delta\ge\varepsilon^2/512\), proving the lemma.
+\end{proof}
+
+
+\Needspace{8\baselineskip}
+\section{The ambient-independent two-parameter RP5 Tooth}\label{app:rp5}
+
+The proof uses the general Tooth lemma of Appendix~\ref{app:tooth} and the perfect-transversal sampling lemma of Appendix~\ref{app:thin}.
+
+\begin{theorem}[Two-parameter RP5 Tooth]\label{thm:rp5}
+Let \(0<x\le y\le 2^{-16}\), let \(|Y|=n\ge x^{-600}\), and let \(U\) be disjoint from \(Y\). Put \(F=\overline{G}\). Assume that \(F[Y\cup\{u\}]\) has no induced \(P_{5}\) with endpoint \(u\), for each \(u\in U\). Then one of the following holds.
+\begin{enumerate}[label=(\Alph*)]
+\item A set \(S \subseteq Y\) has size at least \(y^{26} n\), and every \(u\in U\) is \(G\)-complete to \(S\) or has fewer than \(x|S|/4\) neighbours in \(S\).
+\item A \(y^{4}\)-restricted set \(T \subseteq Y\) has size at least \(y^{18} n\). Here restricted is meant with the stronger degree bound \(y^{4}(|T|-1)\).
+\item \(G[Y]\) has a blockade of integer length \(K\) with \(1/y\le K\le x^{-140}\) and width at least \(n/K^{64}\), each pair being complete or directed \(x\)-sparse from the later block to the earlier one.
+\end{enumerate}
+
+
+\end{theorem}
+\subsection{Local contracts and rooted module equivalence}\label{subsec:rp5-local}
+\begin{proof}
+The original Tooth lemma is used at parameters \((\xi,\allowbreak k)\), with \(\xi\le\allowbreak 2^{-20},\allowbreak  2^{16}\le\allowbreak k\le\allowbreak 2\xi^{-1/2}\), and local order \(V\ge\allowbreak 16\xi^{-3}\). For an outside root set whose roots have no induced \(F\text{-}P_{4}\) into the local set, it returns either a core of size at least \(V/k\) on which every root is complete or has fewer than a \(\xi/4\) fraction of neighbours, simultaneously for all roots, or an early pure, complete or anticomplete blockade:
+\noindent TL1: \(k^{1/4}\le\allowbreak K\le\allowbreak 1/\xi\), width \(V/K^{4}\);\par
+\noindent TL2: \((8K)^{4}\le\allowbreak k^{3}\le\allowbreak (9K)^{4}\), width \(V/(2k)\);\par
+\noindent TL3: \(K=\lfloor 1/\xi\rfloor\), width \(\xi^{2} V/k\);\par
+\noindent TL4: \(K=\lfloor 1/(\xi k)\rfloor\), width \(\xi^{3} V/4\).\par
+This exact contract is proved in Appendix~\ref{app:tooth}. Here is the exact rooted-\(P_{4}\) equivalence used to apply it. For \(u\) outside \(Y\), let \(C\) be an \(F\)-component of \(N_{G}(u) \cap  Y\). If \(C\) is not a module of \(G[Y]\), a vertex \(p\) outside \(C\) mixes on \(C\). It cannot be in another \(F\)-component of \(N_{G}(u) \cap  Y\), so \(up\) is an \(F\)-edge. Connectivity supplies an \(F\)-edge \(qr\) in \(C\) with \(pq\) an \(F\)-edge and \(pr\) a nonedge. Then \(u\text{-}p\text{-}q\text{-}r\) is an induced \(F\text{-}P_{4}\). Conversely, in an induced \(F\text{-}P_{4}\) \(u\text{-}p\text{-}q\text{-}r\), the vertices \(q,\allowbreak r\) belong to one such component, and \(p\) mixes on it. Thus the module condition is equivalent to the absence of a rooted \(F\text{-}P_{4}\), and is inherited whenever the target set is restricted.
+
+The thin-layer sampling contract is: if sets partition a set of size \(M\), every partial transversal induces a perfect graph, \(\max \) layer size/\(M\le\allowbreak \varepsilon^{4}/128\), and \(0<\varepsilon\le\allowbreak 2^{-16}\), then there is an \(\varepsilon\)-restricted subset of size at least \(\varepsilon^{2} M/512\), with the stronger degree bound \(\varepsilon(|T|-1)\). It was proved in Appendix~\ref{app:thin}. Both local contracts are used exactly as stated.
+\subsection{An ordered frontier has the required one-sided root law}\label{subsec:rp5-frontier-law}
+At a node \(S\) choose \(u\) in \(U\). Its ordered children are all nonempty \(F\)-components \(C_{1}\),...,\(C_{d}\) of \(N_{G}(u) \cap  S\), in any fixed order, followed by \(A=S\) minus \(N_{G}(u)\) if nonempty. They partition \(S\). Take an antichain \(Z_{1}\),...,\(Z_{m}\) of tree nodes, listed in child order.
+
+For \(i<j\) and \(v\) in \(Z_{j}\), there is no induced \(F\text{-}P_{4}\) with endpoint \(v\) and the other three vertices in \(Z_{i}\). At their lowest common ancestor there are two cases. Different \(C\) children give a \(G\)-complete pair, so \(v\) has no \(F\)-neighbour in \(Z_{i}\) and cannot begin that path. Otherwise \(Z_{i}\) is in a \(C\) child and \(Z_{j}\) in \(A\). The ancestor's root \(u\) is \(G\)-complete to \(Z_{i}\) and anticomplete to \(v\). Prefixing \(u\) to a rooted \(P_{4}\) \(v\text{-}p\text{-}q\text{-}r\) gives the induced \(F\text{-}P_{5}\) \(u\text{-}v\text{-}p\text{-}q\text{-}r\), a contradiction. This argument uses only containment at the lowest common ancestor. It makes no claim that an A child is endpoint-closed in the original \(Y\).
+
+For each \(j<l\) separated as \(C\) versus A, record that ancestor root in \(R_{j}\). Thus \(|R_{j}|\le\allowbreak m-1\), every root in \(R_{j}\) is complete to \(Z_{j}\), and for this particular pair some root \(r(j,\allowbreak l)\) in \(R_{j}\) is anticomplete to \(Z_{l}\). Pairs separated as distinct \(C\) children are complete and need no root. All recorded roots remain outside \(Y\) and retain the original \(\operatorname{RP}_{5}\) law.
+\subsection{Simultaneous root-family purification}\label{subsec:rp5-purification}
+Suppose \(B_{1}\),...,\(B_{m}\) have the property that every later vertex is complete or \(\theta\)-sparse to an earlier block. Retain the same families \(R_{j}\), whose members are complete to \(B_{j}\). Set \(\xi=m^{-2},\allowbreak  k=m,\allowbreak  \eta=1/(16m^{3}),\allowbreak  \theta\le\allowbreak \tau/(256m^{5})\). Call \(i<j\) good if some \(r\) in \(R_{j}\) has at least \(\eta|B_{i}|\) nonneighbours in \(B_{i}\); otherwise call it red. Goodness has an existential quantifier; redness has the corresponding universal quantifier over \(R_{j}\).
+
+For each good pair choose its witnessing root \(r\) and a nonneighbour \(p_{ij}\) in \(B_{i}\) with \(\deg _{G}(p_{ij},\allowbreak S_{ij})\le\allowbreak \theta|B_{j}|/\eta\), where \(S_{ij}\) is the sparse-type part of \(B_{j}\). This follows by averaging: \(e(B_{i},\allowbreak S_{ij})\le\allowbreak \theta|B_{i}||S_{ij}|\). The root \(r\) is complete to \(B_{j}\), so a rooted \(F\text{-}P_{4}\) from \(p_{ij}\) into \(B_{j}\) would extend with \(r\) to an \(\operatorname{RP}_{5}\). Thus Tooth applies to \(B_{j}\) with the at most \(m\) representatives \(p_{ij}\) as its outside root set.
+
+Unless it returns an early output, Tooth gives \(D_{j}\ge\allowbreak |B_{j}|/m\). For each good pair: if \(p_{ij}\) is complete to \(D_{j}\), remove \(D_{j} \cap  S_{ij}\); if \(p_{ij}\) has fewer than \(\xi|D_{j}|/4\) neighbours in \(D_{j}\), remove the complete-type part of \(D_{j}\). The respective deletion fractions are at most \(\theta m/\eta\) and less than \(\xi/4\). All deletions are unioned and measured relative to the original \(D_{j}\). They cost at most \(m(\xi/4+\theta m/\eta)\le\allowbreak 1/(4m)+\tau/16<1/8\).
+
+For each red \(i<j\), delete from \(D_{i}\) every nonneighbour of every root in \(R_{j}\). There are at most \(m^{2}\) root occurrences affecting \(B_{i}\), each costing less than \(\eta|B_{i}|\), so the extra cost is at most \(m^{2} \eta|B_{i}|=|B_{i}|/(16m)\le\allowbreak |D_{i}|/16\). The resulting \(E_{i}\) have size at least \(|B_{i}|/(2m)\). Good pairs have uniform original types; on red pairs every \(r\) in \(R_{j}\) is exactly complete to \(E_{i}\). Representatives need not survive in any final block. Different good pairs may use different roots, without repeated intersections of cores.
+\subsection{The interval argument and the forcing path}\label{subsec:rp5-interval}
+Choose an \(F\)-component \(C_{i}\) of \(E_{i}\) with size at least \(|E_{i}|/m\). If this is impossible in some \(E_{i}\), the component grouping lemma instead gives a complete length-\(m\) blockade of width at least \(|E_{i}|/m^{2}\); this is an early output. Otherwise \(C_{i}\) is \(F\)-connected and has size at least \(|B_{i}|/(2m^{2})\). Sparse original types now have threshold \(\beta=2m^{2} \theta<1/2\). They cannot become complete, so each ambiguous pair (both types present in its later block) was red. Let \(Q\) be the graph of these ambiguous pairs, with each edge directed toward the later index.
+
+Claim: two vertices of any increasing \(Q\)-path cannot lie in different \(C\) children of one tree node. The indices in every child subtree are an interval, as are the indices in the parent subtree. Between two such indices the path remains inside the parent interval, and before the later \(C\) child it cannot visit the A interval, which is last. Therefore one consecutive path edge must cross two \(C\)-child intervals. Such a pair is complete, contradicting its being a \(Q\)-edge.
+
+Consequently any two path indices \(j<l\) have a separating root \(r(j,\allowbreak l)\) in \(R_{j}\): their lowest common ancestor separates them as \(C\) versus \(A\). For an edge \(i\to j\) of that path and a still later path block \(C_{l}\), red exactification says this particular root is complete to \(C_{i}\). It is already complete to \(C_{j}\) and anticomplete to \(C_{l}\).
+
+
+
+If \(z\) in \(C_{l}\) were complete to \(C_{j}\) but sparse to \(C_{i},\allowbreak  F\)-connectedness of \(C_{j}\) supplies an \(F\)-edge \(v\text{-}w\) crossing its two types, with \(v\) sparse to \(C_{i}\) and \(w\) complete. Since \(2\beta<1\), choose \(b\) in \(C_{i}\) nonadjacent in \(G\) to both \(z\) and \(v\). Then \(r(j,\allowbreak l)\text{-}z\text{-}b\text{-}v\text{-}w\) is an induced \(F\text{-}P_{5}\): consecutive edges follow from the separating root, the choice of \(b\), and the crossing edge \(v\text{-}w\); the six nonconsecutive pairs \(r\text{-}b,\allowbreak r\text{-}v,\allowbreak r\text{-}w,\allowbreak z\text{-}v,\allowbreak z\text{-}w,\allowbreak b\text{-}w\) are \(G\)-edges. This contradicts \(\operatorname{RP}_{5}\) of \(r(j,\allowbreak l)\). Thus each later vertex's type vector along the earlier path is a prefix of complete types followed by sparse types.
+
+Crucial quantifier point: \(r(j,\allowbreak l)\) may depend on both indices. Every such root was made complete to \(C_{i}\) because the red deletion used all members of \(R_{j}\). No common root for a path is required. An empty \(R_{j}\) is harmless: whenever this argument needs a root at \(j\), a later path index \(l\) itself proves \(R_{j}\) nonempty.
+
+Put \(r=\lfloor \sqrt{m}\rfloor\). If an increasing \(Q\)-path has \(r\) vertices, select \(r\) of them. In its \(j\)-th block there are at most \(j\le\allowbreak r\) prefix profiles. Keep a largest profile cell. The resulting blockade has width at least \(\min |C_{i}|/r\) and later-to-earlier precision at most \(r \beta\). Profiles are measured relative to the original connected \(C_{i}\), so the independent choices of cells have no circular dependence. If no such path exists, the increasing-path height partition has at most \(r-1\) levels. Every level is \(Q\)-independent and one has at least \(m/(r-1)\ge\allowbreak r\) indices. Those block pairs already have uniform types.
+\subsection{Quantitative frontier lemma}\label{subsec:rp5-quantitative}
+For a frontier of \(m\ge\allowbreak 2^{16}\) blocks \(Z_{i}\) of size at least \(W\), take \(\xi_{0}=\tau/(64m^{5}),\allowbreak  k_{0}=m,\allowbreak  W\ge\allowbreak 16\xi_{0}^{-3}\). Use Tooth on each \(Z_{i}\) against the union of all later original \(Z_{j}\); Appendix~\ref{subsec:rp5-frontier-law} gives its input. Without an early output this gives \(|B_{i}|\ge\allowbreak |Z_{i}|/m,\allowbreak  \theta=\xi_{0}/4=\tau/(256m^{5})\). The second Tooth in Appendix~\ref{subsec:rp5-purification} is permitted since \(|B_{i}|\ge\allowbreak 16m^{6}\). Appendices~\ref{subsec:rp5-purification}--\ref{subsec:rp5-interval} now give either component grouping or a length-\(r\) complete-or-directed-\(\tau\)-sparse blockade with width at least \(W/(2m^{3} r)\).
+
+If \(|Z_{i}|\ge\allowbreak n/m^{b}\), every result has actual integer length \(m^{1/4}\le\allowbreak K\le\allowbreak 64m^{5}/\tau\) and width at least \(n/K^{4b+12}\). For completeness, the early conversions are: first Tooth TL1: exponent \(4b+4\); first TL2: exponent \(2b+3\), since \(K\ge\allowbreak \sqrt{m}\); first TL3: exponent \(b+5\), using \(\xi_{0}\ge\allowbreak 1/(2K),\allowbreak  K\ge\allowbreak m\); first TL4: exponent \(b+11\), using \(\xi_{0}\ge 1/(2mK)\), \(K\ge m\); second Tooth: exponent at most \(4b+8\); component output \(K=m\): exponent \(b+5\); path/level output \(K=r\): exponent \(3b+11\), using \(m\le\allowbreak r^{3}\) and \(r\ge\allowbreak 256\). All these are at most \(4b+12\). The largest early length is \(1/\xi_{0}\). This is where actual TL3/TL4 lengths are essential.
+
+The same lemma applies to positive layers with a root complete to its own layer and anticomplete to all later layers. Those roots directly give both the one-sided rooted-\(P_{4}\) law and all separating roots, so the tree interval argument is unnecessary for that application.
+
+The elementary component grouping used above has no rounding defect: if atoms have size less than \(M/k\), greedily form groups of size at least \(M/k^{2}\). Each group uses less than \((k+1)M/k^{2}\) vertices; after \(k-1\) groups, more than \(M/k^{2}\) remain. Hence \(k\) groups exist and are pairwise complete.
+\subsection{Full tree and its mass accounting}\label{subsec:rp5-tree}
+Set \(t=\lceil y^{-4}\rceil\) and \(s_{\mathrm{cut}}=n/t^{6}\). Split every node of size at least \(s_{\mathrm{cut}}\) unless it already satisfies the complete-or-sparse condition of (A). A bad root has \(x|S|/4\le\allowbreak \deg _{G}(u,\allowbreak S)<|S|\), so both its A and neighbour parts are nonempty, and every child is proper. The tree is finite. A clean node has size at least \(s_{\mathrm{cut}}\ge\allowbreak y^{24} n/64\ge\allowbreak y^{26} n\), giving A. Assume none exists. Small children, of size less than \(s_{\mathrm{cut}}\), form disjoint atoms partitioning \(Y\). Retain all nodes of size at least \(s_{\mathrm{cut}}\).
+
+If \(t\) retained nodes form an antichain, Appendix~\ref{subsec:rp5-quantitative} applies with \(m=t,\allowbreak  \tau=x,\allowbreak b=6\) and gives \(C\). Otherwise the retained tree has \(q<t\) leaves and fewer than \(t\) branching nodes, hence fewer than \(2t\) exceptional nodes when terminal nodes are included.
+
+At any node, its small \(C\) children are pairwise complete. If their union \(D\) has size at least \(ts_{\mathrm{cut}}\), component grouping gives \(t\) complete blocks of width at least \(|D|/t^{2}\ge\allowbreak n/t^{7}\), which gives \(C\). Otherwise the atom mass at that node is less than \((t+1)s_{\mathrm{cut}}\), including its possible small A child. Thus exceptional nodes carry atom mass less than \(2t(t+1)s_{\mathrm{cut}}\). Unary nodes carry at least \(n-2t(t+1)s_{\mathrm{cut}}\).
+
+The \(q\) complete root-to-leaf paths cover all unary nodes. Summing their unary atom masses counts each unary node at least once, so one full path has unary atom mass at least \(n/t-2(t+1)s_{\mathrm{cut}}\). Branching nodes may occur on this path; their atoms are simply omitted. The argument does not require a long uninterrupted unary segment.
+
+At a unary node, exactly one child is retained. If it is A, the atom layer is the entire neighbour set \(P\). It has \(xs_{\mathrm{cut}}/4\le\allowbreak |P|<ts_{\mathrm{cut}}\). Its root is complete to \(P\) and anticomplete to the entire continuation, hence to all later positive layers. If it is a \(C\) child, record its A part as a negative layer of size less than \(s_{\mathrm{cut}}\). Its root is anticomplete to that layer and complete to the entire continuation. The remaining atoms are small \(C\) siblings.
+
+All small \(C\) siblings at negative steps are pairwise complete, also across different depths: the earlier sibling is complete to the selected \(C\) child containing all later nodes. If their total mass is at least \(ts_{\mathrm{cut}}\), grouping again yields \(C\). Otherwise discard less than \(ts_{\mathrm{cut}}\) of fringe. The remaining positive and negative layers have total mass at least \(n/t-(3t+2)s_{\mathrm{cut}}\ge\allowbreak 3n/(4t)\). One of the two directions has mass at least \(3n/(8t)\).
+\subsection{Finish both directions}\label{subsec:rp5-directions}
+Negative direction. Its mass is \(M\ge\allowbreak 3n/(8t)\), each layer has size less than \(s_{\mathrm{cut}}\), and hence maximum layer fraction \(\lambda\le\allowbreak 8/(3t^{5})\le\allowbreak 8y^{20}/3\le\allowbreak y^{16}/128\). Every partial transversal induces a perfect graph. A direct justification, avoiding any ambiguity about orientations, is that it is weakly chordal in \(F\): every vertex of a hole \(C_{k},\allowbreak  k\ge\allowbreak 5\), is an endpoint of an induced \(P_{4}\); the same holds for an antihole, since the complement of four consecutive cycle vertices is a \(P_{4}\) whose endpoints are the two middle cycle vertices. Choose the earliest-layer vertex of a hypothetical hole or antihole and a \(P_{4}\) in it with that endpoint. Its layer root prefixes this to an induced \(F\text{-}P_{5}\), a contradiction. Thus neither \(F\) nor \(G\) on a partial transversal has a hole of length at least \(5\). Weakly chordal graphs are perfect \cite{hayward}. No assertion about perfection inside an individual layer is used.
+
+Apply the thin-layer lemma with \(\varepsilon=y^{4}\). It gives a restricted set of size at least \(y^{8} M/512\ge\allowbreak 3y^{8} n/(4096t)\ge\allowbreak 3y^{12} n/8192\ge\allowbreak y^{18} n\), which is \(B\).
+
+Positive direction. Every layer lies in [\(xs_{\mathrm{cut}}/4,\allowbreak ts_{\mathrm{cut}}\)), so its number \(L\) satisfies \(L\le\allowbreak 4t^{6}/x\le\allowbreak 256x^{-25}\le\allowbreak x^{-27}\). There exists \(m\) in [\(t,\allowbreak L\)] such that \(m\) layers each have size at least \(n/m^{3}\). Otherwise, writing their sizes in decreasing order \(a_{i}\), the first \(t-1\) contribute less than \(n/t^{4}\) in total and \(a_{i}<n/i^{3}\) for \(i\ge\allowbreak t\). Thus \(\sum  a_{i}\le n/t^{4}+n/[2(t-1)^{2}]<n/(8t)\), contradicting positive mass at least \(3n/(8t)\). Keep these \(m\) layers in their original order and apply Appendix~\ref{subsec:rp5-quantitative} with \(b=3,\allowbreak \tau=x\). This gives \(C\). The lower size \(xs_{\mathrm{cut}}/4\) was used only to bound \(L\), not charged as the final common width.
+\subsection{Numerical closure}\label{subsec:rp5-checks}
+In all frontier/layer applications, \(t\le\allowbreak m\le\allowbreak x^{-27},\allowbreak  \tau=x,\allowbreak  b\) in \{\(3,\allowbreak 6\)\}. The order requirement \(W\ge 16\xi_{0}^{-3}\) with \(W=n/m^{b}\) reads \(n\ge 2^{22} x^{-3} m^{b+15}\). For the positive layers \(b=3\) and \(m\le x^{-27}\), so the right side is at most \(2^{22} x^{-489}\); for the frontier \(b=6\) and \(m=t\le 2x^{-4}\), so it is at most \(2^{43} x^{-87}\). Both bounds follow from \(n\ge x^{-600}\) and \(x\le 2^{-16}\). All actual lengths satisfy \(K\ge\allowbreak m^{1/4}\ge\allowbreak t^{1/4}\ge\allowbreak 1/y,\allowbreak  K\le\allowbreak 64m^{5}/x\le\allowbreak 64x^{-136}\le\allowbreak x^{-140}\). The width exponent \(4b+12\le\allowbreak 36\) is stronger than the claimed \(64\). Direct component-grouping outputs have \(K=t\) and width at least \(n/t^{7}\), also within \(C\). This completes the proof.
+\end{proof}
+
+\Needspace{8\baselineskip}
+\section{A polynomial bridge from EH transversals}\label{app:bridge}
+
+This bridge supplies the negative-layer input for rooted orders at least six. The proof includes the required rounding and logarithmic estimates. It requires an EH exponent for the actual transversal class; it supplies no such exponent by itself.
+
+\begin{theorem}[Polynomial thin-layer bridge]
+Let an \(M\)-vertex graph be partitioned into nonempty layers. Suppose that, for every \(j\), every partial transversal on \(j\) vertices (a set meeting each layer at most once) induces a graph with a clique or stable set of size at least \(j^\kappa\), where \(0<\kappa\le1\) is fixed. Put \(h=\max(2,1/\kappa)\). If
+\[
+ 0<\varepsilon\le2^{-4(h+10)},\qquad
+ \lambda=\frac{\max(\text{layer size})}{M}\le\varepsilon^{4h+4},
+\]
+then there is an induced subgraph \(T\) with \(|T|\ge\varepsilon^{2h+2}M\) such that \(T\) or its complement has maximum degree at most \(\varepsilon(|T|-1)\). No finite forbidden-subgraph description of the transversal class is required. In particular, this applies to \(E_5\) transversals once an EH exponent for their class has been proved.
+\end{theorem}
+\begin{proof}
+Set
+\[
+ q=\lceil\varepsilon^{-2}\rceil,\quad t=\lceil q^h\rceil,\quad
+ \delta=\frac{q}{512t},\quad L=\ln(1/\varepsilon),\quad
+ \ell=\lceil\varepsilon^{-1}\ln(1/\delta)\rceil.
+\]
+Since \(q\le2\varepsilon^{-2}\) and \(t\le2^{h+1}\varepsilon^{-2h}\),
+\[
+ 32t^2\lambda\le2^{2h+7}\varepsilon^4\le1.
+\]
+Thus \(\lambda\le1/(32t^2)\). Nonempty layers imply \(\lambda\ge1/M\), so \(M\ge32t^2\) and \(\delta M\ge qt/16\ge1\).
+
+Sample \(2t\) distinct vertices uniformly. A sampled pair lies in one layer with probability at most \(\lambda\). The expected number of colliding pairs is at most \(2t^2\lambda\le1/16\). With probability at least \(1/2\), at most \(t\) collisions occur; deleting at most one vertex per collision leaves \(t\) representatives from distinct layers. Their homogeneous size is at least \(t^\kappa\ge q\). Double counting gives at least
+\[
+ \frac12\frac{\binom{M}{2t}}{\binom{M-q}{2t-q}}
+ \ge\frac12\left(\frac{M}{2t}\right)^q
+\]
+homogeneous \(q\)-subsets. One of the two kinds therefore numbers at least \(\tfrac14(M/(2t))^q\).
+
+Suppose no set \(S\) with \(|S|\ge\delta M\) has maximum degree at most \(\varepsilon(|S|-1)\) in the graph or in its complement, and put \(u=\lceil\delta M\rceil\le2\delta M\). In the orientation whose homogeneous \(q\)-sets are stable, every subset of size at least \(u\) has maximum degree greater than \(\varepsilon(|S|-1)\). The greedy container encoding gives
+\[
+ I_q\le\binom{M}{\ell}\binom{u}{q-\ell},
+\]
+provided \(\ell\le q\), which is verified below. Repeatedly test a deterministically chosen vertex of maximum degree in the graph induced on the current candidate set \(R\), and stop when \(|R|\le u\). If the vertex is absent from the independent set, remove it alone; otherwise record it and remove its closed neighbourhood, which has more than \(\varepsilon(|R|-1)+1\) vertices and so leaves fewer than \((1-\varepsilon)|R|\) candidates. Hence at most \(\ell\) choices are recorded, because \((1-\varepsilon)^\ell M\le\delta M\le u\). If fewer choices suffice, pad the record with vertices of the independent set left in the final container. The \(\ell\)-element record determines the container and gives the stated bound.
+
+Using \(\binom{q}{\ell}\le2^q\) and \(q!\ge(q/e)^q\), comparison with the lower bound yields
+\[
+ \left(\frac1{2\delta}\right)^{1-\ell/q}
+ \le4e\frac tq\,4^{1/q}\le8e\frac tq.
+\]
+If \(u<q-\ell\), the container bound is zero and already contradicts the lower bound.
+
+For the rounding and logarithmic term, \(t\le2q^h\) gives
+\begin{align*}
+ A:=\ln(1/\delta)&\le\ln1024+(h-1)\ln q\\
+ &\le(h+9)\ln2+2(h-1)L\le2hL,
+\end{align*}
+where the final comparison uses \(L\ge4(h+10)\ln2\). Write \(B=\ln(1/(2\delta))\le A\). Then
+\[
+ \frac\ell q B\le(\varepsilon A+\varepsilon^2)B
+ \le4h^2\varepsilon L^2+2h\varepsilon^2L<1.
+\]
+For an elementary bound, \(\varepsilon L^2\) and \(\varepsilon^2L\) increase with \(\varepsilon\) in the stated range. At the cutoff, each resulting expression decreases with \(h\ge2\): its logarithmic derivative is bounded respectively by
+\[
+ \frac2h+\frac2{h+10}-4\ln2<0,\qquad
+ \frac1h+\frac1{h+10}-8\ln2<0.
+\]
+Consequently the sum is bounded by its value at \(h=2\), \(\varepsilon=2^{-48}\), which is less than \(2^{-30}\). Since \(B>1\), this also gives \(\ell<q\).
+
+Restoring the logarithmic factor in the counting inequality gives \(1/(2\delta)<8e^2(t/q)\), whereas its definition gives \(1/(2\delta)=256t/q\), a contradiction. Thus the desired restricted set has size at least \(\delta M\). Finally,
+\[
+ \delta=\frac q{512t}\ge2^{-(h+9)}\varepsilon^{2h-2}
+ \ge\varepsilon^{2h+2},
+\]
+because \(\varepsilon^4\le2^{-(h+9)}\). This proves the theorem.
+\end{proof}
+
+
+\Needspace{8\baselineskip}
+\section{RP6 frontiers and the third offending-pair purification}\label{app:rp6front}
+
+The two first calls use the RP5 contract of Appendix~\ref{app:rp5}; the third uses the original RP4/general Tooth of Appendix~\ref{app:tooth}. All roots and witnesses belong to the same original host.
+
+Let \(m\ge\allowbreak 2^{16}\) be an integer and \(0<\tau\le\allowbreak 1\). Let \(Z_{1}\),...,\(Z_{m}\) be disjoint subsets of \(Y\). For each \(j\) let \(R_{j}\) be a set of at most \(m\) roots outside \(Y\). Assume:
+
+\begin{enumerate}[label=(\Roman*)]
+\item Every root in every \(R_{j}\) has \(\operatorname{RP}_{6}\) into the original set \(Y\), and every \(r\) in \(R_{j}\) is \(G\)-complete to \(Z_{j}\).
+\item Every vertex of a later \(Z_{j}\) has \(\operatorname{RP}_{5}\) into each earlier \(Z_{i}\).
+\item There is a fixed graph \(J\) on \([m]\) such that all pairs outside \(J\) are \(G\)-complete. On every increasing \(J\)-path, for any two path indices \(j<l\), some root in \(R_{j}\) is \(G\)-anticomplete to the entire \(Z_{l}\).
+\end{enumerate}
+
+
+Here an increasing path means a directed path when each edge is oriented from its smaller to its larger endpoint.
+
+This abstract input covers two constructions used by the tree proof.
+
+For a positive sequence, each \(Z_{j}\) has its own root complete to \(Z_{j}\) and anticomplete to all later sets; use its singleton root family and \(J\) complete. Property (II) follows by prefixing that own root to a putative rooted \(F\text{-}P_{5}\).
+
+For an ordered cut-tree frontier, a node \(S\) is split using a root \(r\) into the \(F\)-components of \(N_{G}(r) \cap  S\), in any fixed order, followed by \(A=S\) minus \(N_{G}(r)\). Nonempty children inherit their order recursively. Take any antichain of \(m\) tree nodes, in this leaf order. For every pair \(j<l\) whose lowest common ancestor separates them into a \(C\) child and A, put one such separating root in \(R_{j}\). There are at most \(m-1\) chosen roots per \(j\). Let \(J\) consist exactly of these \(C/A\) pairs. Two frontier sets in different \(C\) children of their lowest common ancestor are \(G\)-complete. They are therefore not edges of \(J\).
+
+An increasing \(J\)-path cannot visit two different \(C\)-child intervals at any one split. If it did, its path segment inside that node would cross between two consecutive visited \(C\)-child intervals. The crossing path edge would join different \(C\) children and thus would not be in \(J\). There can be no intervening path vertices outside the node interval. Consequently any two path vertices whose lowest common ancestor is this node lie in a \(C\) child and A, rather than in different \(C\) children. This proves (III). In the \(C/A\) case a separator is complete to the earlier frontier set and anticomplete to the later one. Prefixing it to a rooted \(F\text{-}P_{5}\) from a later vertex proves (II); for different \(C\) children (II) is immediate because the pair is \(G\)-complete.
+
+The rooted laws always refer to original \(Y\). They are inherited under all subsequent restrictions of blocks, and roots need not be adjacent to each other.
+\subsection{Quantitative conclusion}\label{subsec:rp6-frontier}
+\begin{lemma}[RP6 frontier purification]\label{lem:rp6-frontier}
+Suppose, in addition, that \(|Z_{i}|\ge\allowbreak W\) for every \(i\), where \(W \ge\allowbreak  2^{7200} \tau^{-600} m^{36000}\). For an ambient scale \(n\) and a fixed \(b\ge\allowbreak 0\), suppose also \(|Z_{i}|\ge\allowbreak n/m^{b}\).
+
+Then at least one of these two conclusions holds.
+\begin{enumerate}[label=(\Alph*)]
+\item A set \(T\subseteq\bigcup_i Z_{i}\) is \(m^{-4}\)-restricted and \(|T|\ge n/m^{b+44}\).
+\item There is a directed \(\tau\)-semisparse blockade in \(\bigcup_i Z_{i}\) of integer length \(K\) with \(m^{1/4} \le K \le m^{9000} \tau^{-140}\) and width at least \(n/K^{4b+216}\). Each complete or anticomplete early output is included as a special case.
+\end{enumerate}
+
+
+
+
+
+\end{lemma}
+The parameter \(m\) in \((A)\) is the actual input length. In particular \((A)\) cannot be relabeled as a fixed-\(y\)-width conclusion if \(m\) is as large as a power of \(1/x\). Its use in the full-tree theorem is given in Appendix~\ref{app:rp6}.
+\subsection{First and canonical RP5 purification}\label{subsec:rp6-first}
+\begin{proof}
+Set \(a_{0} = \tau/(2^{12} m^{60}),\allowbreak    \theta = a_{0}/4 = \tau/(2^{14} m^{60}),\allowbreak  a_{1} = \tau/(64m^{2}),\allowbreak       \eta = 1/(16m^{28})\). Both \(\operatorname{RP}_{5}\) Tooth calls use coarse parameter \(1/m\).
+
+First apply \(\operatorname{RP}_{5}\) Tooth to each \(Z_{i}\), using all vertices of the later original \(Z\) blocks as its roots. This is legal by (II), and the order hypothesis is exactly \(|Z_{i}|\ge\allowbreak a_{0}^{-600}\). If an early outcome occurs, record it for Appendix~\ref{subsec:rp6-early}. Otherwise retain \(B_{i}\) with \(|B_{i}|\ge\allowbreak |Z_{i}|/m^{26}\), such that every later vertex is complete to \(B_{i}\) or has fewer than \(\theta |B_{i}|\) neighbours in \(B_{i}\). Freeze these original two types.
+
+For \(i<j\) call the pair good if some \(r\) in \(R_{j}\) has at least \(\eta |B_{i}|\) nonneighbours in \(B_{i}\); call it red otherwise. For each good pair choose one such \(r\). Let \(S_{ij}\) be the sparse-type part of \(B_{j}\) toward \(B_{i}\). By averaging over \(B_{i}\) minus \(N_{G}(r)\), choose \(p_{ij}\) there with \(\deg _{G}(p_{ij},\allowbreak S_{ij}) \le\allowbreak  \theta |B_{j}|/\eta\). The representative \(p_{ij}\) has \(\operatorname{RP}_{5}\) into \(B_{j}\): an induced \(F\text{-}P_{5}\) from \(p_{ij}\) inside \(B_{j}\) could be prefixed by \(r\), giving an induced \(F\text{-}P_{6}\) from \(r\). Here \(r\) is \(G\)-complete to \(B_{j}\) and \(G\)-nonadjacent to \(p_{ij}\).
+
+Apply \(\operatorname{RP}_{5}\) Tooth to \(B_{j}\) with the at most \(m\) representatives \(p_{ij}\), using fine parameter \(a_{1}\) and coarse parameter \(1/m\). The size condition holds: \(|B_{j}| \ge\allowbreak  2^{7200} \tau^{-600} m^{35974} \ge\allowbreak  a_{1}^{-600} = 2^{3600} \tau^{-600} m^{1200}\). Again record any early output. Otherwise obtain \(D_{j}\) with \(|D_{j}|\ge\allowbreak |B_{j}|/m^{26}\), on which each representative is complete or strictly \(a_{1}/4\)-sparse.
+
+For each good pair delete from \(D_{j}\) the opposite original type: if \(p_{ij}\) is sparse on \(D_{j}\), delete all full-type vertices; if it is full on \(D_{j}\), delete all sparse-type vertices. Using the original \(D_{j}\) for every budget, the total fraction deleted is at most \(m(a_{1}/4 + \theta m^{26}/\eta) = \tau/(256m) + \tau/(2^{10} m^{5}) < 1/16\).
+
+For every red pair \(i<j\), delete from \(D_{i}\) the nonneighbours of every root in \(R_{j}\). At most \(m^{2}\) root occurrences affect a fixed earlier block \(B_{i}\). The total loss from this operation is at most \(m^{2} \eta |B_{i}| = |B_{i}|/(16m^{26}) \le\allowbreak  |D_{i}|/16\). All operations use the original sets, so they may be done simultaneously.
+
+Call the surviving sets \(C_{i}\). Then \(|C_{i}| \ge\allowbreak  |B_{i}|/(2m^{26}) \ge\allowbreak  |Z_{i}|/(2m^{52})\). Every nonred pair is uniform in its original type, and every root in \(R_{j}\) is exactly \(G\)-complete to \(C_{i}\) on a red pair \(i<j\). Each such root remains \(G\)-complete to its own \(C_{j}\).
+
+Each old sparse type has at most \(\beta |C_{i}|\) neighbours in \(C_{i}\), where \(\beta = 2m^{26} \theta = \tau/(2^{13} m^{34}) < 1/2\). Because \(\beta<1\), sparse types cannot have become complete. Consequently every ambiguous \(C\) pair is red. Let \(Q\) be its ambiguity graph. It is a subgraph of \(J\): a \(G\)-complete original pair never becomes ambiguous. Conditions \((I)\) and (III) hold for the inherited root families.
+
+No connected component of \(F[C_{i}]\) is selected or needed.
+\subsection{The new offending-pair pass}\label{subsec:rp6-offending}
+Freeze the original \(C_{i}\) and their \(\beta\)-types for this whole step. Call an old ambiguous pair \(i<j\) offending if there exist \(l>j,\allowbreak  z\) in \(C_{l}\), and \(r\) in \(R_{j}\) such that \(r\) is \(G\)-nonadjacent to \(z,\allowbreak  z\) is \(G\)-complete to \(C_{j},\allowbreak  z\) has sparse type toward \(C_{i}\). The quantifier runs over all later original vertices \(z\). It is not restricted to the vertices that will survive subsequent trimming. For each offending pair fix one witness \((l,\allowbreak z,\allowbreak r)\).
+
+The pair is red, so this \(r\) is \(G\)-complete to \(C_{i}\) as well as to \(C_{j}\). The set \(C_{i}\) minus \(N_{G}(z)\) has size at least \((1-\beta)|C_{i}|\). Let \(S_{ij}\) now denote the old sparse-type portion of \(C_{j}\) toward \(C_{i}\). Averaging gives \(b_{ij}\) in \(C_{i}\) minus \(N_{G}(z)\) with \(\deg _{G}(b_{ij},\allowbreak S_{ij}) \le\allowbreak  \beta |C_{j}|/(1-\beta) \le\allowbreak  2 \beta |C_{j}|\).
+
+This representative \(b=b_{ij}\) has \(\operatorname{RP}_{4}\) into \(C_{j}\). Indeed, an induced \(F\text{-}P_{4}\) \(b\text{-}v\text{-}w\text{-}d\), with \(v,\allowbreak w,\allowbreak d\) in \(C_{j}\), would extend to \(r\text{-}z\text{-}b\text{-}v\text{-}w\text{-}d\), an induced \(F\text{-}P_{6}\) with endpoint \(r\). The new consecutive pairs \(rz\) and \(zb\) are \(F\)-edges. All new nonconsecutive pairs are \(F\)-nonedges: \(r\) is \(G\)-complete to \(C_{i}\) and \(C_{j}\), and \(z\) is \(G\)-complete to \(C_{j}\). The three nonconsecutive pairs inside \(b\text{-}v\text{-}w\text{-}d\) are absent in \(F\) by its induced-\(P_{4}\) hypothesis. All six vertices are distinct: \(r\) lies outside \(Y\) and \(z,\allowbreak b\),\{\(v,\allowbreak w,\allowbreak d\)\} lie in three different blocks. This contradicts \((I)\).
+
+There is at most one \(b_{ij}\) per earlier \(i\), hence fewer than \(m\) representatives into each \(C_{j}\). Apply the original general Tooth to \(C_{j}\) with these representatives and \(\xi=m^{-2},\allowbreak  k=m\). Its numerical hypotheses hold: \(\xi\le\allowbreak 2^{-20},\allowbreak  2^{16}\le\allowbreak m\le\allowbreak 2\xi^{-1/2}\), and \(|C_{j}|\ge\allowbreak 16m^{6}\). If a TL1--TL4 output occurs, retain it. Otherwise obtain \(D'_{j}\) with \(|D'_{j}|\ge\allowbreak |C_{j}|/m\) such that every chosen \(b_{ij}\) is complete or strictly \(\xi/4\)-sparse on \(D'_{j}\).
+
+For each offending pair, delete from \(D'_{j}\) the opposite old \(C\) type. If \(b_{ij}\) is sparse on \(D'_{j}\), deleting full-type vertices costs strictly less than \(\xi |D'_{j}|/4\). If \(b_{ij}\) is full on \(D'_{j}\), deleting sparse-type vertices costs at most \(2 \beta |C_{j}| \le\allowbreak  2m \beta |D'_{j}|\). The total loss over fewer than \(m\) pairs is at most \(m(\xi/4+2m \beta) =1/(4m)+2m^{2} \beta < 1/2\) of \(D'_{j}\). Write \(E_{j}\) for the survivors. Thus \(|E_{j}|\ge\allowbreak |C_{j}|/(2m)\ge\allowbreak |Z_{j}|/(4m^{53})\), and every old offending pair is uniform in its original \(C\) type.
+
+All exact root relations survive. Original sparse types now have threshold \(\beta'=2m \beta <1\). Original full types remain full. Conversely, a vertex complete to \(E_{i}\) must have had full type toward \(C_{i}\), because an old sparse-type vertex has at most \(\beta' |E_{i}|<|E_{i}|\) neighbours there. This converse applies to every later vertex and every earlier index.
+
+Let \(Q'\) be the new ambiguity graph. It is a subgraph of \(Q\) and of \(J\), and none of the old offending pairs is an edge of \(Q'\).
+\subsection{Restored monotonicity and a large blockade}\label{subsec:rp6-monotonicity}
+Consider an increasing \(Q'\)-path. Let \(i\to j\) be one of its edges and let \(l>j\) be a later path index. By (III), some \(r\) in \(R_{j}\) is anticomplete to the entire original \(Z_{l}\), hence to the original \(C_{l}\).
+
+A vertex \(z\) in \(E_{l}\) cannot be sparse-type to \(E_{i}\) and complete to \(E_{j}\): by \(\beta'<1\) its old types toward \(C_{i},\allowbreak C_{j}\) would be sparse and complete respectively. Together with \(r\) this would witness that \(i<j\) was an old offending pair. That pair was purified, so it cannot be an edge of \(Q'\).
+
+Thus each later vertex on an increasing \(Q'\)-path has a prefix of full types followed by a suffix of sparse types on earlier path vertices.
+
+Let \(r_{0}=\lfloor \sqrt{m}\rfloor\). If \(Q'\) has an increasing path of \(r_{0}\) vertices, partition each corresponding \(E\) block according to this prefix length and retain a largest cell. At most \(r_{0}\) cells occur per block. The retained \(r_{0}\) blocks have width at least \(\min  |Z_{i}|/(4m^{53} r_{0})\) and are directed \((r_{0} \beta')\)-semisparse. Their precision is at most \(\tau\).
+
+If there is no such path, assign each index its longest-path height. Equal-height classes are independent in \(Q'\). With fewer than \(r_{0}\) heights, one class contains at least \(r_{0}\) indices. Select \(r_{0}\) blocks from it. Their pairs were already uniform, and they have even better width and precision than in the preceding paragraph.
+
+This proves the main directed semisparse outcome. The blocks \(C_i\) and \(E_i\) need not be \(F\)-connected: the six-vertex contradiction in Appendix~\ref{subsec:rp6-offending} uses only the rooted exclusions and the preserved full/sparse types.
+\subsection{Early outcomes and actual lengths}\label{subsec:rp6-early}
+The first \(\operatorname{RP}_{5}\) Tooth restricted outcome has precision \(m^{-4}\) and size \(|Z_{i}|/m^{18}\). The second has that precision and size \(|B_{i}|/m^{18}\ge\allowbreak |Z_{i}|/m^{44}\). Hence each gives conclusion \((A)\).
+
+The first \(\operatorname{RP}_{5}\) blockade outcome has actual \(K\ge\allowbreak m,\allowbreak  K\le\allowbreak a_{0}^{-140}\), precision \(a_{0}\le\allowbreak \tau\), and width at least \(n/K^{b+64}\). The second has \(K\ge\allowbreak m,\allowbreak  K\le\allowbreak a_{1}^{-140}\le\allowbreak a_{0}^{-140}\), precision \(a_{1}\le\allowbreak \tau\), and width at least \(n/K^{b+90}\).
+
+For the third Tooth, \(|C_{j}|\ge\allowbreak |Z_{j}|/(2m^{52})\ge\allowbreak n/m^{b+53}\). Substituting \(\xi=m^{-2},\allowbreak k=m\) into its four early outcomes gives:
+\noindent TL1: \(K\ge\allowbreak m^{1/4}\), width at least \(n/K^{4b+216}\).\par
+\noindent TL2: \(K\ge\allowbreak \sqrt{m}\), width at least \(n/K^{2b+109}\).\par
+\noindent TL3: \(K=m^{2}\), width at least \(n/K^{(b+58)/2}\).\par
+\noindent TL4: \(K=m\), width at least \(n/K^{b+61}\).\par
+In TL2, \(K\ge\allowbreak m^{3/4}/9\ge\allowbreak \sqrt{m}\), using \(m\ge\allowbreak 2^{16}\).
+
+For the main output \(K=r_{0}=\lfloor \sqrt{m}\rfloor,\allowbreak  m\le\allowbreak r_{0}^{3}\) and \(r_{0}\ge\allowbreak 4\) imply \(n/(4m^{b+53} r_{0}) \ge\allowbreak  n/r_{0}^{3b+161}\). All displayed width exponents are at most \(4b+216\).
+
+Every output length is at least \(m^{1/4}\). Every early or main length is at most \(a_{0}^{-140}\), since all third-Tooth lengths are at most \(m^{2}\): \(a_{0}^{-140} = 2^{1680} m^{8400} \tau^{-140} \le\allowbreak  m^{8505} \tau^{-140} \le\allowbreak  m^{9000} \tau^{-140}\). This completes conclusion \((B)\) with its actual length and width.
+\end{proof}
+
+\Needspace{8\baselineskip}
+\section{The RP6 full-tree theorem with its actual floating scale}\label{app:rp6}
+
+The frontier input is proved in Appendix~\ref{app:rp6front} and the transversal input in Appendix~\ref{app:bridge}. We first state the theorem under \(\EH(E_5)\), then give the relative variant under \(\EH(E_5\cap\mathcal A)\) for a hereditary class \(\mathcal A\) containing the whole host. Part II uses the relative variant. The local size cutoff of the cut tree is written \(s_{\mathrm{cut}}=n/t^6\); it is unrelated to the fixed target path order \(s\).
+
+
+\subsection{Inputs, constants, and statement}\label{subsec:rp6-statement}
+\begin{theorem}[Two-parameter RP6 Tooth]\label{thm:rp6}
+Write \(F=\overline{G}\). Let \(E_{5}\) be the hereditary class of graphs admitting an order such that the first vertex of every induced \(P_{5}\) is not an endpoint. Equivalently each vertex has no rooted \(P_{5}\) into its suffix. Assume every \(j\)-vertex member of \(E_{5}\) has a clique or stable set of size at least \(j^{\kappa_{E}}\), where \(0<\kappa_{E}\le\allowbreak 1\). The unrestricted \(\operatorname{EH}(E_{5})\) premise is not an input to the main fixed-target induction; the relative \(\operatorname{EH}(\mathcal A \cap  E_{5})\) variant below is used there.
+
+Put \(h = \max (2,\allowbreak 1/\kappa_{E}),\allowbreak  d_{t} = \lceil 4h+5\rceil,\allowbreak  c_{*} = \min (2^{-16},\allowbreak  2^{-(h+10)}),\allowbreak  C = 6d_{t}+3,\allowbreak  A_{\mathrm{clean}} = 6d_{t}+2,\allowbreak  e = \max (50,\allowbreak 8h+d_{t}+10),\allowbreak  K_{\exp } = 9000C+140,\allowbreak  E = 7801+36006C\).
+
+Let \(0<x\le\allowbreak y\le\allowbreak c_{*}\), let \(Y\) have \(n\ge\allowbreak x^{-E}\) vertices, and let \(U\) be outside \(Y\). Suppose every \(u\) in \(U\) has \(\operatorname{RP}_{6}\) into the original \(Y\): \(F[Y\cup\{u\}]\) has no induced six-vertex path with endpoint \(u\).
+
+Then at least one of the following holds.
+\begin{enumerate}[label=(\Alph*)]
+\item There is \(S \subseteq Y\) with \(|S|\ge y^{A_{\mathrm{clean}}} n\), such that every \(u\) in \(U\) is \(G\)-complete to \(S\) or has strictly fewer than \(x|S|/4\) neighbours in \(S\).
+\item For some real \(z\) with \(x^{C}\le z\le y\), there is a \(z^{4}\)-restricted set \(T \subseteq Y\) of size at least \(z^{e} n\).
+\item There is an ordered blockade in \(Y\) of integer length \(K\) with \(1/y \le K \le x^{-K_{\exp }}\) and width at least \(n/K^{240}\), such that every pair is complete or directed \(x\)-sparse from its later block to its earlier block.
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+Here \(\varepsilon\)-restricted means \(G[T]\) or \(F[T]\) has maximum degree at most \(\varepsilon |T|\). Directed \(x\)-sparse means every vertex in the later block has at most \(x \cdot \) the earlier block size neighbours in that block. The restricted scale \(z\) in \((B)\) is deliberately allowed to vary down to a fixed power of \(x\).
+\end{theorem}
+\subsection{The full cut tree and its cutoff}\label{subsec:rp6-tree}
+\begin{proof}
+Set \(t=\lceil y^{-d_{t}}\rceil,\allowbreak  s_{\mathrm{cut}}=n/t^{6}\). Then \(t\ge\allowbreak 2^{16}\) and \(t\le\allowbreak 2y^{-d_{t}}\le\allowbreak 2x^{-d_{t}}\).
+
+Start at node \(Y\). At a node \(S\) of size at least \(s_{\mathrm{cut}}\), stop successfully if every root in \(U\) is complete to \(S\) or has degree strictly less than \(x|S|/4\) there. Otherwise choose a bad root \(u\). Its degree satisfies \(x|S|/4 \le\allowbreak  |N_{G}(u) \cap  S| < |S|\). Split \(S\) into the \(F\)-components of \(N_{G}(u) \cap  S\), in any fixed order, followed by \(A=S\) minus \(N_{G}(u)\). Ignore empty children. Both the neighbour set and A are nonempty, so all children are proper. Continue at children of size at least \(s_{\mathrm{cut}}\); smaller children are atoms.
+
+A clean node gives \((A)\), because \(|S|\ge\allowbreak s_{\mathrm{cut}}\ge\allowbreak 2^{-6} y^{6d_{t}}n\ge\allowbreak y^{6d_{t}+2}n\). The process is finite. If no clean node occurs, all terminal pieces are atoms, and they partition \(Y\).
+
+Call the tree induced by nodes of size at least \(s_{\mathrm{cut}}\) the retained tree. If it has \(t\) incomparable nodes, they are a frontier with \(m=t\) and \(|Z_{i}|\ge\allowbreak s_{\mathrm{cut}}=n/m^{6}\). Apply the frontier lemma with \(\tau=x,\allowbreak b=6\). Its order hypothesis is verified in Appendix~\ref{subsec:rp6-checks}. Its restricted output gives \((B)\) with \(z=1/m\); its blockade output gives \((C)\). Thus assume that no \(t\) incomparable retained nodes exist.
+
+
+The retained tree has fewer than \(t\) leaves. Its branching nodes and terminal nodes together number fewer than \(2t\); call these exceptional. All remaining retained nodes are unary.
+\subsection{Small components and mass on one complete chain}\label{subsec:rp6-mass}
+At any retained node let \(D\) be the union of its neighbour-component children of size less than \(s_{\mathrm{cut}}\). If \(|D|\ge\allowbreak ts_{\mathrm{cut}}\), group these components into \(t\) disjoint sets each of size at least \(|D|/t^{2}\). The groups are pairwise \(G\)-complete and have width at least \(s_{\mathrm{cut}}/t=n/t^{7}\). This is \((C)\).
+
+For completeness, the grouping works because each component has size less than \(s_{\mathrm{cut}}\le\allowbreak |D|/t\). Greedily form \(t-1\) groups each just reaching \(|D|/t^{2}\). Each such group has size less than \((t+1)|D|/t^{2}\). Their total is less than \((t^{2}-1)|D|/t^{2}\), leaving at least \(|D|/t^{2}\) for the final group. No component is cut.
+
+Henceforth suppose every retained node has \(|D|<ts_{\mathrm{cut}}\). Its atoms then have total size less than \((t+1)s_{\mathrm{cut}}\), since its A child contributes either zero or fewer than \(s_{\mathrm{cut}}\) vertices. Exceptional-node atoms have total mass less than \(2t(t+1)s_{\mathrm{cut}}\). The unary nodes therefore carry atom mass at least \(n-2t(t+1)s_{\mathrm{cut}}\).
+
+Fewer than \(t\) complete root-to-leaf paths cover the retained tree. Consequently one complete path carries unary atom mass at least \(n/t-2(t+1)s_{\mathrm{cut}}\). It may pass through branching nodes. Their atoms are ignored, but the full containment chain remains available for all witnesses.
+
+At each unary node on this path there is exactly one large child.
+
+If the large child is A, its whole neighbour set is a positive layer \(P\). It obeys \(xs_{\mathrm{cut}}/4 \le\allowbreak  |P| < ts_{\mathrm{cut}}\), and its split root is \(G\)-complete to \(P\) and \(G\)-anticomplete to the whole later continuation.
+
+If the large child is a neighbour component, its small A child is a negative layer, of size less than \(s_{\mathrm{cut}}\). The split root is \(G\)-anticomplete to this negative layer and \(G\)-complete to the whole later continuation. There may also be small neighbour-component siblings.
+
+All such small siblings from negative steps are mutually \(G\)-complete, including siblings from different levels: an earlier sibling is complete to the selected large neighbour component containing the later chain. If their total mass is at least \(ts_{\mathrm{cut}}\), the same grouping gives \((C)\). Otherwise discard this fringe, losing less than \(ts_{\mathrm{cut}}\).
+
+The remaining positive and negative layers have total mass at least \(n/t-(3t+2)s_{\mathrm{cut}} \ge\allowbreak  3n/(4t)\). Thus one of their two directions has mass at least \(3n/(8t)\).
+\subsection{The negative direction}\label{subsec:rp6-negative}
+Suppose the negative layers have total mass \(M\ge\allowbreak 3n/(8t)\). Each has size less than \(s_{\mathrm{cut}}\), so the largest-layer fraction satisfies \(\lambda \le\allowbreak  8/(3t^{5})\).
+
+Every transversal belongs to \(E_{5}\). Indeed, order its vertices by their layers along the chain. If the earliest vertex of an induced \(P_{5}\) were its endpoint, prefix the root witnessing that earliest negative layer. In \(F\) the root is adjacent to that vertex and nonadjacent to every later transversal vertex. This creates an induced rooted \(P_{6}\) inside the original \(Y\) plus that root, a contradiction. No claim that these transversals are \(P_{7}\)-free or perfect is needed.
+
+Take \(\varepsilon=y^{4}\). The choice \(y\le\allowbreak 2^{-(h+10)}\) gives \(\varepsilon\le\allowbreak 2^{-4(h+10)}\). Also \(\lambda \le\allowbreak  (8/3)y^{5d_{t}} \le\allowbreak  y^{16h+16}=\varepsilon^{4h+4}\). Indeed \(5d_{t}-16h-16\ge\allowbreak 4h+9\), and \(y\le\allowbreak 2^{-16}\) absorbs the factor \(8/3\).
+
+The EH-transversal bridge supplies a \(y^4\)-restricted set \(T\) with
+\[
+ |T|\ge y^{8h+8}M\ge \frac{3}{16}y^{8h+8+d_t}n
+ \ge y^{8h+d_t+10}n.
+\]
+Since \(e\ge8h+d_t+10\), this is outcome \((B)\) with \(z=y\). Its range condition holds because \(x^C\le x\le y\).
+\subsection{The positive direction}\label{subsec:rp6-positive}
+Suppose instead the positive layers have total mass at least \(3n/(8t)\). Each has size less than \(ts_{\mathrm{cut}}=n/t^{5}\), and at least \(xs_{\mathrm{cut}}/4\). If there are \(L\) of them, disjointness gives \(L \le\allowbreak 4t^{6}/x \le\allowbreak 256x^{-(6d_{t}+1)} \le\allowbreak x^{-(6d_{t}+3)}=x^{-C}\).
+
+There exists an integer \(m\) with \(t\le\allowbreak m\le\allowbreak L\) for which at least \(m\) positive layers have size at least \(n/m^{3}\). To verify this, list their sizes decreasingly as \(a_{1}\ge\cdots\ge a_{L}\). If no such \(m\) exists, then \(a_{m}<n/m^{3}\) for every \(m\ge\allowbreak t\). The first \(t-1\) entries each have size less than \(n/t^{5}\). Therefore \(\sum _{i} a_{i} < n/t^{4} + n/(2(t-1)^{2}) < n/(8t)\), using the integral bound for \(\sum _{m\ge\allowbreak t}m^{-3}\). This contradicts the assumed mass. If \(L<t\), the first term alone gives a contradiction.
+
+Keep those \(m\) layers in their original order. They form an \(\operatorname{RP}_{6}\) positive sequence. Apply the frontier/positive lemma with \(\tau=x,\allowbreak b=3\). The resulting restricted set has precision \(m^{-4}\) and size at least \(n/m^{47}\). Put \(z=1/m\). Since \(t\le\allowbreak m\le\allowbreak x^{-C},\allowbreak  x^{C}\le\allowbreak z\le\allowbreak 1/t\le\allowbreak y\), and \(e\ge\allowbreak 50\ge\allowbreak 47\). This gives \((B)\). The blockade gives \((C)\) by the calculations below.
+
+It is essential that \(n/m^{3}\), rather than the weak \(xs_{\mathrm{cut}}/4\) individual lower bound, is used as the final block width.
+\subsection{All order, scale, and actual-length checks}\label{subsec:rp6-checks}
+Every frontier or positive application has \(t\le\allowbreak m\le\allowbreak x^{-C},\allowbreak  \tau=x,\allowbreak  b\) in \{\(3,\allowbreak 6\)\}. Its order requirement is \(n\ge\allowbreak 2^{7200} x^{-600} m^{36000+b}\). The right side is at most \(2^{7200} x^{-[600+36006C]}\). Since \(E=7801+36006C\) and \(x\le\allowbreak 2^{-16}\), the hypothesis \(n\ge\allowbreak x^{-E}\) implies this with substantial room. Hence every subsidiary \(\operatorname{RP}_{5}\) or general-Tooth order requirement included in the local lemma is met.
+
+The local restricted output has precision \(z^{4}\) at \(z=1/m\) and size at least \(z^{b+44}n\ge\allowbreak z^{50} n\ge\allowbreak z^{e} n\). The interval \(x^{C}\le\allowbreak z\le\allowbreak y\) was checked above.
+
+Every local blockade has actual \(K\ge\allowbreak m^{1/4}\ge\allowbreak t^{1/4}\ge\allowbreak y^{-d_{t}/4}\ge\allowbreak 1/y\), because \(d_{t}\ge\allowbreak 4\). Its upper length is \(K\le\allowbreak m^{9000} x^{-140}\le\allowbreak x^{-(9000C+140)}=x^{-K_{\exp }}\). Its width exponent \(4b+216\) is at most \(240\).
+
+The elementary component-grouping outputs have actual \(K=t\), width at least \(n/t^{7}\), and are complete. Their length is at least \(1/y\) and at most \(x^{-C}\), hence at most \(x^{-K_{\exp }}\); their width is at least \(n/K^{240}\). Thus these outputs satisfy the same contract \((C)\).
+
+The clean bound and negative restricted bound were explicit in Appendices~\ref{subsec:rp6-tree} and \ref{subsec:rp6-negative}. These checks exhaust all outputs of the finite tree process and prove the theorem.
+\end{proof}
+\subsection{Fixed-ambient variant}\label{subsec:rp6-relative}
+\begin{proposition}[Relative-ambient RP6 Tooth]\label{prop:rp6-relative}
+Let \(\mathcal A\) be any hereditary class of graphs \(F\). Suppose the original host \(F[Y \cup  U]\) belongs to \(\mathcal A\), and assume \(\operatorname{EH}\) only for \(\mathcal A\cap  E_{5}\), with exponent \(\kappa_{E}\). Then the conclusion of Theorem~\ref{thm:rp6} holds with the same constants.
+\end{proposition}
+\begin{proof}
+Indeed the \(\operatorname{RP}_{5}\) Tooth used by the frontier proof is ambient-independent. All blocks, later-vertex roots, canonical representatives, offending witnesses and original roots remain in the original host. Every negative transversal is an induced subgraph of that host and belongs to \(E_{5}\) by Appendix~\ref{subsec:rp6-negative}, hence lies in \(\mathcal A\cap  E_{5}\). That is the sole place where \(\operatorname{EH}(E_{5})\) was used. Replacing it by the weaker relative-class hypothesis therefore makes no other change to the proof.
+
+In particular, for a fixed target path \(P_{s}\) one may take \(\mathcal A=\operatorname{Forb}(P_{s})\), and use \(\operatorname{EH}(E_{5} \cap  \operatorname{Forb}(P_{s}))\) obtained from the ordered-tail transfer. The forbidden ambient path is not changed between recursive calls.
+\end{proof}
+
+\Needspace{8\baselineskip}
+\section{The \texorpdfstring{RP\(q\)}{RPq} recurrence in the same hereditary ambient class}\label{app:rpq}
+
+Unlike the specialized RP6 base, both lower rooted orders now have the common floating-scale contract. Every lower call uses an induced subhost of the same original \(F\in\mathcal A\).
+
+\subsection{Common lower-tooth contract}\label{subsec:rpq-lower}
+Let \(q\ge\allowbreak 7\). Fix a hereditary class \(\mathcal A\) of graphs \(F\), and work in \(G=\overline{F}\). Assume both \(\RP_{q-1}\) and \(\RP_{q-2}\) have the following Tooth contract within \(\mathcal A\). After enlarging constants, use the same constants \(A_{0},\allowbreak e_{0},\allowbreak d_{0},\allowbreak c_{0},\allowbreak k_{0},\allowbreak E_{0} \ge\allowbreak 1\) and \(0<\eta_{0}\le\allowbreak 2^{-16}\) for both contracts.
+
+For \(0<a\le b\le \eta_{0}\) and a vertex set \(V\) of size \(N\ge a^{-E_{0}}\), with outside roots whose original ambient \(F\) remains in \(\mathcal A\) and that have the indicated rooted path exclusion into \(V\), at least one of the following exists:
+\begin{enumerate}[label=(\(L_{\arabic*}\))]
+\item a set \(S\subseteq V\) with \(|S|\ge b^{A_{0}} N\) on which every root is complete in \(G\) or has strictly fewer than \(a|S|/4\) \(G\)-neighbours;
+\item a \(z^{4}\)-restricted subset of \(V\) of size at least \(z^{e_{0}} N\), for some \(z\in[a^{c_{0}},b]\);
+\item a directed \(a\)-semisparse blockade in \(V\) of integer length \(K\) with \(1/b\le K\le a^{-k_{0}}\) and width at least \(N/K^{d_{0}}\).
+\end{enumerate}
+
+As usual, \(\RP_{j}\) means absence of an induced \(j\)-vertex path in \(F\) with the specified root as an endpoint; \(\varepsilon\)-restricted allows either \(G\) or \(F\) to have maximum degree at most \(\varepsilon \cdot \) the set size. All roots and all blocks are induced subsets of the same original ambient graph \(F\in\mathcal A\).
+\subsection{A quantified \texorpdfstring{RP\(q\)}{RPq} frontier statement}\label{subsec:rpq-frontier}
+\begin{lemma}[RP\(q\) frontier purification]\label{lem:rpq-frontier}
+Put
+\begin{equation}\label{eq:rpq-frontier-constants}
+ J_{0}=4A_{0}+11,\quad H=c_{0} J_{0},\quad J=k_{0} J_{0},\quad Q=E_{0} J_{0},\quad m_{0}=\max (2^{16},\lceil 1/\eta_{0}\rceil).
+\end{equation}
+Let \(m\ge m_{0}\) be an integer, \(0<\tau\le 1\), and \(b_{0}\ge 0\). Suppose \(Z_{1},\ldots,Z_{m}\) form an \(\RP_{q}\) ordered cut-tree frontier, or an \(\RP_{q}\) positive sequence, inside an original \(n\)-scale vertex set \(Y\). That is, the sets \(Z_{i}\) arise from one of the two constructions of Appendix~\ref{app:rp6front}, with roots outside \(Y\) that have \(\RP_{q}\) into the original \(Y\); these constructions supply root families \(R_{j}\) of at most \(m\) roots satisfying (I) and (III) there, with \(\RP_{6}\) replaced by \(\RP_{q}\). The separation graph called \(J\) in that appendix is unrelated to the exponent \(J\) of \eqref{eq:rpq-frontier-constants}. Suppose also that
+\begin{equation}\label{eq:rpq-frontier-order}
+ |Z_{i}| \ge (m/\tau)^{Q},\qquad |Z_{i}|\ge n/m^{b_{0}}.
+\end{equation}
+Then at least one of the following holds.
+\begin{enumerate}[label=(\(F_{\arabic*}\))]
+\item For some \(z\) with \((\tau/m)^{H}\le z\le 1/m\), a \(z^{4}\)-restricted set \(T\subseteq\bigcup_i Z_{i}\) has \(|T|\ge z^{e_{0}+b_{0}+2A_{0}+1}n\).
+\item There is a directed \(\tau\)-semisparse blockade in \(\bigcup_i Z_{i}\) of integer length \(K\) with \(m^{1/4}\le K\le (m/\tau)^{J}\) and width at least \(n/K^{3b_{0}+9A_{0}+d_{0}+3}\).
+\end{enumerate}
+
+
+\end{lemma}
+\begin{proof}
+The frontier and root-family definitions are exactly those in Appendix~\ref{app:rp6front}, with \(\operatorname{RP}_{6}\) replaced by \(\RP_{q}\). An ordered cut tree splits at a root into the \(F\)-components of its \(G\)-neighbourhood, followed by its \(G\)-nonneighbourhood A child. At most \(m\) roots per block are recorded from \(C/A\) lowest common ancestors. Pairs in different \(C\) children are \(G\)-complete. Along any increasing ambiguity path no two indices lie in different \(C\)-child intervals of one split, so every two such indices have a recorded separating root. These are purely order/interval facts, independent of \(q\). In a positive sequence the own roots separate every earlier/later pair.
+
+A later vertex has \(\RP_{q-1}\) into each earlier \(Z_{i}\): a hypothetical rooted \(P_{q-1}\) prefixes with the earlier separating root to form an \(\RP_{q}\) violation. Different \(C\)-child pairs are complete and immediate.
+\subsection{Two preparatory passes}\label{subsec:rpq-preparatory}
+Use \(a_{0}=\tau/(2^{12} m^{4A_{0}+10}),\allowbreak  a_{1}=\tau/(64m^{2}),\allowbreak  \eta=1/(16m^{A_{0}+2}),\allowbreak  \theta=a_{0}/4\). All lower Tooth applications below use coarse parameter \(1/m\).
+
+The first \(\RP_{q-1}\) Tooth, with all later original vertices as roots, either gives an early output or yields \(B_{i}\subseteq Z_{i}\) with \(|B_{i}|\ge |Z_{i}|/m^{A_{0}}\). Every later vertex is full or \(\theta\)-sparse toward \(B_{i}\). Freeze its type.
+
+For each \(i<j\), call the pair good if some recorded root \(r\) in \(R_{j}\) has at least \(\eta|B_{i}|\) nonneighbours in \(B_{i}\). Otherwise call it red. For a good pair choose such \(r\) and a representative \(p\) in \(B_{i}\) minus \(N_{G}(r)\) having at most \(\theta|B_{j}|/\eta\) neighbours in the sparse-type part of \(B_{j}\). This follows by averaging. Since \(r\) is complete to \(B_{j}\), a rooted \(F\text{-}P_{q-1}\) from \(p\) into \(B_{j}\) could be prefixed by \(r\). Thus \(p\) has \(\RP_{q-1}\) into \(B_{j}\).
+
+Apply the second \(\RP_{q-1}\) Tooth to \(B_{j}\) with these fewer than \(m\) representatives and fine parameter \(a_{1}\). Unless an early output occurs, retain \(D_{j}\subseteq B_{j}\) with \(|D_{j}|\ge |B_{j}|/m^{A_{0}}\). Purify every good pair by deleting the opposite frozen type according to whether its representative is full or \(a_{1}/4\)-sparse on \(D_{j}\). The total loss fraction is at most \(m(a_{1}/4 + \theta m^{A_{0}}/\eta) =\tau/(256m) + \tau/(2^{10} m^{2A_{0}+7}) <1/16\).
+
+For every red pair \(i<j\), remove from \(D_{i}\) all nonneighbours of every root in \(R_{j}\). There are at most \(m^{2}\) relevant root occurrences, so this loses at most \(m^{2} \eta |B_{i}|=|B_{i}|/(16m^{A_{0}})\le\allowbreak |D_{i}|/16\). The resulting \(C_{i}\) satisfy \(|C_{i}|\ge\allowbreak |Z_{i}|/(2m^{2A_{0}})\). Every ambiguous pair is red, with all its recorded later roots full to the earlier \(C_{i}\). The old sparse threshold becomes \(\beta=2m^{A_{0}} \theta=\tau/(2^{13} m^{3A_{0}+10})<1/2\). No sparse type becomes full.
+\subsection{Offending pairs and the \texorpdfstring{\(\RP_{q-2}\)}{RP(q-2)} pass}\label{subsec:rpq-offending}
+Freeze the \(C_{i}\) and their types. An ambiguous pair \(i<j\) is offending if for some later original \(z\) in \(C_{l}\) and some \(r\) in \(R_{j},\allowbreak  r\) is nonadjacent to \(z\) in \(G,\allowbreak  z\) is full to \(C_{j},\allowbreak  z\) is sparse-type to \(C_{i}\). Choose one such witness for every offending pair. Since the pair is red, \(r\) is full to both \(C_{i}\) and \(C_{j}\).
+
+Averaging over \(C_{i}\) minus \(N_{G}(z)\) chooses a representative \(p\) there with at most \(2\beta |C_{j}|\) neighbours in the sparse-type part of \(C_{j}\). The representative \(p\) has \(\RP_{q-2}\) into \(C_{j}\): a rooted induced \(F\text{-}P_{q-2}\) from \(p\) could be prefixed by \(r\text{-}z\) to give an induced \(F\text{-}P_{q}\). The two new consecutive edges are \(r\text{-}z\) and \(z\text{-}p\). All new nonconsecutive pairs are absent in \(F\), since \(r\) is \(G\)-full to \(C_{i},\allowbreak C_{j}\) and \(z\) is \(G\)-full to \(C_{j}\). Distinctness follows from the root outside \(Y\) and the three distinct blocks. This argument uses no \(F\)-connectedness.
+
+Apply the \(\RP_{q-2}\) Tooth with these fewer than \(m\) representatives, fine parameter \(a_{1}\), and coarse \(1/m\). If it gives no early output, it yields \(D'_{j}\subseteq C_{j}\) with \(|D'_{j}|\ge |C_{j}|/m^{A_{0}}\). Purify every offending pair by deleting its opposite old \(C\) type. The total loss fraction is at most \(m(a_{1}/4+2m^{A_{0}} \beta) =\tau/(256m)+\tau/(2^{12} m^{2A_{0}+9})<1/2\). Retain \(E_{j}\) with \(|E_{j}|\ge |C_{j}|/(2m^{A_{0}})\ge |Z_{j}|/(4m^{3A_{0}})\).
+
+Old sparse types have new threshold \(\beta'=2m^{A_{0}} \beta=\tau/(2^{12} m^{2A_{0}+10})<1\). Thus a vertex full to an \(E_{i}\) was originally full to \(C_{i}\). Conversely an originally sparse vertex stays sparse. The new ambiguity graph is a subgraph of the old one and excludes all old offending pairs.
+
+Along an increasing ambiguity path, a later vertex cannot have type \(0\) then \(1\) across an earlier path edge. The recorded separating root would make this edge an old offending pair, using the converse type preservation just established. Therefore each later vertex has a prefix of full types followed by sparse types on earlier path vertices.
+
+With \(r=\lfloor \sqrt{m}\rfloor\), a path of \(r\) vertices has at most \(r\) profiles per block, so retain a largest profile cell. The width is at least \(\min  |Z_{i}|/(4m^{3A_{0}}r)\), and precision is \(r \beta'\le\allowbreak \tau\). If no such path exists, longest-path height levels give \(r\) pairwise nonambiguous indices and a still stronger width. This is the main blockade output.
+\subsection{Order hypotheses and early outputs}\label{subsec:rpq-checks}
+The assumption \(|Z_{i}|\ge\allowbreak (m/\tau)^{Q}\) dominates \(a_{0}^{-E_{0}}\): \(2^{12}\le\allowbreak m\) and \(Q=E_{0}(4A_{0}+11)\). Furthermore \(a_{0}^{-E_{0}} / a_{1}^{-E_{0}} =64^{E_{0}} m^{(4A_{0}+8)E_{0}}\). This dominates both \(m^{A_{0}}\) and \(2m^{2A_{0}}\). Hence the second and third lower-Tooth input order requirements hold.
+
+Every restricted early output has \(z\le\allowbreak 1/m\). At the first call its size is at least \(z^{e_{0}} n/m^{b_{0}}\). At the second it is at least \(z^{e_{0}} n/m^{b_{0}+A_{0}}\). At the third it is at least \(z^{e_{0}} n/(2m^{b_{0}+2A_{0}})\). All are at least \(z^{e_{0}+b_{0}+2A_{0}+1}n\). Their lower scale is at least \(a_{0}^{c_{0}}\): \(a_{0}\ge\allowbreak \tau/m^{4A_{0}+11}\ge\allowbreak (\tau/m)^{J_{0}}\), so \(z\ge\allowbreak (\tau/m)^{H}\).
+
+Every blockade early output comes from \((L_{3})\), at coarse parameter \(1/m\) and fine parameter \(a\in\{a_{0},a_{1}\}\). It is a directed \(a\)-semisparse blockade of integer length \(K\) with \(m\le K\le a^{-k_{0}}\), inside one of the sets \(Z_{i}\), \(B_{j}\), \(C_{j}\). Since \(a_{0}\le a_{1}\le\tau\), it is directed \(\tau\)-semisparse. Its length satisfies \(K\ge m\ge m^{1/4}\) and, by the bound \(a_{0}\ge(\tau/m)^{J_{0}}\) just used,
+\[
+ K\le a_{0}^{-k_{0}}\le (m/\tau)^{k_{0}J_{0}}=(m/\tau)^{J}.
+\]
+The input orders of the three calls are at least \(n/m^{b_{0}}\), \(n/m^{b_{0}+A_{0}}\) and \(n/(2m^{b_{0}+2A_{0}})\) respectively. In the weakest case, the third, the width is at least
+\begin{equation}\label{eq:rpq-early-width}
+ \frac{n}{2m^{b_{0}+2A_{0}}K^{d_{0}}}
+ \ge\frac{n}{K^{b_{0}+2A_{0}+d_{0}+1}}
+ \ge\frac{n}{K^{3b_{0}+9A_{0}+d_{0}+3}},
+\end{equation}
+using \(2\le m\le K\). Hence every \((L_{3})\) early output satisfies \((F_{2})\).
+
+The main output has \(K=r=\lfloor \sqrt{m}\rfloor\). Here \(r\ge 2^{8}\) and \(m<(r+1)^{2}\le r^{3}\), so \(K\ge m^{1/4}\) and \(K\le m\le (m/\tau)^{J}\). Its width is at least
+\[
+ \frac{n}{4m^{b_{0}+3A_{0}}r}\ge\frac{n}{r^{3b_{0}+9A_{0}+3}}
+ \ge\frac{n}{K^{3b_{0}+9A_{0}+d_{0}+3}},
+\]
+and its precision is at most \(r\beta'\le\tau\). The level-set alternative has the same length, at least this width, and uniform pair types. Thus \((F_{2})\) holds in every blockade case, and each restricted case gives \((F_{1})\).
+\end{proof}
+\subsection{The full \texorpdfstring{RP\(q\)}{RPq} tooth recurrence}\label{subsec:rpq-recurrence}
+\begin{theorem}[The relative-ambient RP\(q\) recurrence]\label{thm:rpq}
+Let \(E_{q-1}\) consist of graphs with an order in which the first vertex of every induced \(P_{q-1}\) is not an endpoint. In addition to the lower-Tooth hypotheses, assume that the hereditary class \(\mathcal A\cap  E_{q-1}\) has \(\operatorname{EH}\) exponent \(\kappa\), where \(0<\kappa\le 1\). With \(J_{0},H,J,Q,m_{0}\) as in \eqref{eq:rpq-frontier-constants}, set
+\begin{equation}\label{eq:rpq-tree-constants}
+\begin{gathered}
+ h=\max (2,1/\kappa),\qquad d_{t}=\lceil 4h+5\rceil,\qquad C_{\mathrm{tree}}=6d_{t}+3,\\
+ \eta_{\mathrm{new}}=\min (2^{-16},\,2^{-(h+10)},\,1/m_{0}),
+\end{gathered}
+\end{equation}
+and
+\begin{equation}\label{eq:rpq-new-constants}
+\begin{aligned}
+ A_{\mathrm{new}}&=6d_{t}+2, & e_{\mathrm{new}}&=\max (e_{0}+2A_{0}+7,\,8h+d_{t}+10),\\
+ c_{\mathrm{new}}&=H(C_{\mathrm{tree}}+1), & d_{\mathrm{new}}&=9A_{0}+d_{0}+21,\\
+ k_{\mathrm{new}}&=J(C_{\mathrm{tree}}+1), & E_{\mathrm{new}}&=Q+(Q+6)C_{\mathrm{tree}}+1.
+\end{aligned}
+\end{equation}
+
+
+
+For \(0<x\le\allowbreak y\le\allowbreak \eta_{\mathrm{new}}\) and \(n\ge\allowbreak x^{-E_{\mathrm{new}}}\), an \(\RP_{q}\) input inside the fixed ambient class \(\mathcal A\) has the lower-Tooth contract of Appendix~\ref{subsec:rpq-lower} with \((A_{0},\allowbreak c_{0},\allowbreak e_{0},\allowbreak k_{0},\allowbreak d_{0},\allowbreak E_{0},\allowbreak \eta_{0})\) replaced by the corresponding new constants.
+\end{theorem}
+\begin{proof}
+Here are all reductions needed for this assertion. Build the full cut tree at \(t=\lceil y^{-d_{t}}\rceil\) and \(s_{\mathrm{cut}}=n/t^{6}\); this local size cutoff is unrelated to a target path order. The finite tree and mass argument is exactly the one written in full in Appendices~\ref{subsec:rp6-tree}--\ref{subsec:rp6-positive}. It is independent of the rooted path order except at the two places stated next.
+
+A clean node has size at least \(y^{A_{\mathrm{new}}} n\). A \(t\)-node frontier has \(b_{0}=6\). Otherwise, after grouping small complete siblings, one full chain has positive or negative mass at least \(3n/(8t)\). Positive layers have number \(L\le\allowbreak x^{-C_{\mathrm{tree}}}\). The decreasing-size argument gives \(t\le\allowbreak m\le\allowbreak L\) positive layers of width at least \(n/m^{3}\), so their frontier parameter is \(b_{0}=3\).
+
+A negative transversal belongs to \(\mathcal A\cap  E_{q-1}\): it is an induced subgraph of the original ambient \(F\in\mathcal A\), and an earliest-endpoint \(P_{q-1}\) could be prefixed by the corresponding negative root to violate \(\RP_{q}\). With \(\varepsilon=y^{4}\), its layer fraction is at most \(8/(3t^{5})\le\allowbreak \varepsilon^{4h+4}\). The \(\operatorname{EH}\)-transversal bridge thus gives a \(y^{4}\)-restricted set of size at least \(y^{8h+d_{t}+10}n\).
+
+In either frontier/positive branch, \(t\le\allowbreak m\le\allowbreak x^{-C_{\mathrm{tree}}},\allowbreak  b_{0}\le\allowbreak 6,\allowbreak  \tau=x\). Also \(m\ge t\ge 1/y\ge 1/\eta_{\mathrm{new}}\ge m_{0}\), as Lemma~\ref{lem:rpq-frontier} requires. The order requirement is \(n\ge\allowbreak m^{b_{0}} (m/x)^{Q}\), which follows from \(n\ge\allowbreak x^{-E_{\mathrm{new}}}\). The floating restricted scale satisfies \(z\ge\allowbreak (x/m)^{H}\ge\allowbreak x^{H(C_{\mathrm{tree}}+1)}=x^{c_{\mathrm{new}}}\), and \(z\le\allowbreak 1/m\le\allowbreak y\). Its width exponent is at most \(e_{0}+2A_{0}+7\le\allowbreak e_{\mathrm{new}}\).
+
+Blockade lengths satisfy \(K\ge\allowbreak m^{1/4}\ge\allowbreak t^{1/4}\ge\allowbreak 1/y\) and \(K\le\allowbreak (m/x)^{J}\le\allowbreak x^{-k_{\mathrm{new}}}\). Their width exponent \(3b_{0}+9A_{0}+d_{0}+3\) is at most \(d_{\mathrm{new}}\), because \(b_{0}\le6\). The elementary complete component-grouping outputs have \(K=t\) and width \(n/t^{7}\), hence also satisfy this common contract.
+
+This proves the abstract full-tree recurrence.
+\end{proof}
+\subsection{The fixed-ambient requirement is essential}
+When the intended target is a path \(P_{s}\), a legitimate choice is \(\mathcal A=\Forb(P_{s})\). At every stage, lower rooted Tooth statements, transversal classes, and representative applications must all use this same \(\mathcal A\). A theorem established only for \(P_{s-1}\)-free ambient graphs cannot be reused on a \(P_{s}\)-free graph without a separate argument.
+
+The relative-class premise \(\EH(\mathcal A\cap E_{q-1})\) is supplied by Section~\ref{sec:tail} from the lower rooted contract, \(W_s\), and \(\EH(P_{s-1})\). Those hypotheses remain separate from the structural frontier recurrence.
+
+For \(q=6\), the lower \(\operatorname{RP}_{4}\) Tooth has a different early-length contract; the specialized proof in Appendix~\ref{app:rp6} handles that base. For \(q\ge\allowbreak 7\) both required lower orders are at least \(5\) and the present common-contract induction applies directly.
+
+
+\Needspace{8\baselineskip}
+\section{Variable-scale local oracles and the sparsification potential}\label{app:bootstrap}
+
+This is an interface theorem conditional on a local oracle. It handles the actual restricted scale \(z\), rather than substituting the coarse parameter \(y\). The lower admissible scale \(\rho^{2c}\), the gain \(z^{7/6}\), and the floor estimates are all retained.
+
+\begin{hypothesis}[Variable-scale local oracle]\label{hyp:oracle}
+Fix an integer \(h\ge2\), a hereditary class \(\mathcal C\) of \(\overline{P_{h}}\)-free graphs, and constants \(a\ge 4\), \(b\ge 1\), \(c\ge 2\), \(d\ge 1\), \(e\ge 4\), \(L\ge 1\), \(y_{0}>0\). For all \(0<\rho\le y\le y_{0}\), every \(y^{3}\)-sparse member \(H\) of \(\mathcal C\) of order \(N\ge \rho^{-L}\) has at least one of the following outputs.
+\begin{enumerate}[label=(\(O_{\arabic*}\))]
+\item \(H\) is \(2y^{4}\)-sparse. (An oracle that never returns this output is permitted.)
+\item A weakly \(\rho\)-semisparse blockade of integer length \(k\) with \(1/y\le k\le \rho^{-c}\) and width at least \(N/k^{d}\).
+\item Disjoint sets \(X,Y\) with \(|X|\ge y^{a} N\) and \(|Y|\ge (1-by)N\), such that \(Y\) is directed \(\rho\)-sparse to \(X\).
+\item A \(z^{4}\)-restricted set of size at least \(z^{e} N\), for some \(z\in[\rho^{c},y]\).
+\end{enumerate}
+\end{hypothesis}
+The hypothesis quantifies over the members of \(\mathcal C\), and not over all \(\overline{P_{h}}\)-free graphs. Since \(\mathcal C\) is hereditary, it is available in every induced subgraph met below. Output \((O_{2})\) requires weak semisparsity only, so a directed \(\rho\)-semisparse blockade is an admissible \((O_{2})\) output. Output \((O_{3})\), in contrast, bounds the degree of each vertex of \(Y\) and must be directed. In this paper \(h=s\), and \(\mathcal C\) is either \(\Forb(\overline{P_s})\) (Section~\ref{sec:comb}) or \(C_{r,s}=\co(E_r\cap\Forb(P_s))\) (Appendix~\ref{app:tail}).
+
+Choose a fixed \(c_{0}\) with \(0<c_{0}<\min (1/16,\exp (-2b))\), and shrink \(y_{0}\) if necessary so that
+\begin{equation}\label{eq:boot-y0}
+ y_{0}\le \min \bigl(c_{0}^{4}/2,\ c_{0}^{2},\ c_{0}/2,\ 1/(2b),\ 1/(60h),\ 1/100\bigr).
+\end{equation}
+Shrinking \(y_{0}\) preserves the hypothesis, and neither constant depends on \(\rho\) or \(H\). Put
+\begin{equation}\label{eq:boot-constants}
+\begin{aligned}
+ B&=\max (6(e+1),\,a+4,\,4),\qquad R=2c,\qquad C_{w}=2c+1,\\
+ Q&=\max (L+B+1,\,RB+3,\,B+c(e+4)+2),\\
+ D_{w}&=\max (B+d+1,\,a+B+2,\,(B+e+6)/2,\,RB+3).
+\end{aligned}
+\end{equation}
+Real exponents are permitted; increasing them to integers is harmless.
+
+\begin{theorem}[Bootstrap from a fixed sparse start]\label{thm:bootstrap}
+Under Hypothesis~\ref{hyp:oracle}, with the constants \eqref{eq:boot-y0} and \eqref{eq:boot-constants}, every \(c_{0} y_{0}^{3}\)-sparse member \(G\) of \(\mathcal C\) of order \(n\ge \rho^{-Q}\), where \(0<\rho<y_{0}\), has a weakly \(\rho\)-semisparse blockade of integer length \(k\) with \(2\le k\le \rho^{-C_{w}}\) and width at least \(n/k^{D_{w}}\).
+\end{theorem}
+\begin{proof}
+Call \(y\) in [\(\rho^{R},\allowbreak y_{0}\)] admissible if some induced subgraph \(F\) of \(G\) is \(c_{0} y^{3}\)-sparse and \(|F|\ge\allowbreak y^{B} n\). Every induced subgraph of \(G\) belongs to \(\mathcal C\). The endpoint \(y_{0}\) is admissible. The minimum \(y\) exists: there are finitely many vertex sets and each contributes a closed set of admissible scales. Fix its witness \(F\).
+
+Suppose first \(y\ge\allowbreak \rho\). Construct a residual chain inside \(F\). At step \(j<1/y\), the residual \(H\) has size at least \((1-by)^{j}|F|\ge\allowbreak \exp (-2b)|F|>c_{0}|F|\). It is \(y^{3}\)-sparse and has order \(|H|\ge\allowbreak c_{0} \rho^{B} n\ge\allowbreak \rho^{B+1}n\ge\allowbreak \rho^{-L}\), so the local oracle applies. In an \(O_{3}\) step take \(X\) as the next block and \(Y\) as the residual. The new block has size at least \(c_{0} y^{a}|F|\ge\allowbreak y^{a+2}|F|\), and all later blocks are directed \(\rho\)-sparse to it. If \(K=\lceil 1/y\rceil\) steps are reached, the resulting blockade has width \(y^{a+B+2}n\ge\allowbreak n/K^{a+B+2}\), and \(K\le\allowbreak 2/\rho\le\allowbreak \rho^{-2}\); it is directed, hence weakly, \(\rho\)-semisparse. Every call before this stopping point has \(j<K\) and hence \(j<1/y\).
+
+If \(O_{1}\) occurs, put \(y'=c_{0} y\). The inequalities \(y\le\allowbreak c_{0}^{4}/2\) and \(B\ge\allowbreak 1\) give \(2y^{4}\le\allowbreak c_{0}(y')^{3},\allowbreak  |H|\ge\allowbreak c_{0} y^{B} n\ge\allowbreak (y')^{B} n\). Moreover \(y'\ge\allowbreak c_{0} \rho\ge\allowbreak \rho^{2}\ge\allowbreak \rho^{R}\) and \(y'<y\). This contradicts minimality of \(y\).
+
+In \(O_{2}\), since \(k\ge\allowbreak 1/y\) and \(c_{0}\ge\allowbreak y\ge\allowbreak 1/k,\allowbreak  |H|/k^{d}\ge\allowbreak c_{0} y^{B} n/k^{d}\ge\allowbreak n/k^{B+d+1}\). The original output itself is the required weakly \(\rho\)-semisparse global blockade; previous residual blocks need not be retained.
+
+For \(O_{4}\), write \(T\) for its output and \(z\) for its actual scale. Thus \(|T|\ge\allowbreak c_{0} y^{B} z^{e} n\ge\allowbreak c_{0} z^{B+e}n\). If \(G[T]\) is \(z^{4}\)-sparse, put \(y'=z^{7/6}\). Since \(z\le\allowbreak y_{0}\le\allowbreak c_{0}^{2},\allowbreak  z^{4}\le\allowbreak c_{0} z^{7/2}=c_{0}(y')^{3}\). As \(c_{0}\ge\allowbreak z\) and \(B\ge\allowbreak 6(e+1),\allowbreak  |T|\ge\allowbreak z^{B+e+1}n\ge\allowbreak z^{7B/6}n=(y')^{B} n\). The scale satisfies \(\rho^{R}\le\allowbreak \rho^{7c/6}\le\allowbreak y'<y\). This contradicts minimality. This is exactly why \(z\) may float far below \(y\) without invalidating the potential argument.
+
+If the complement of \(G[T]\) is \(z^{4}\)-sparse, apply Contract~\ref{con:path} to it, with the path \(P_{h}\) and the parameter \(z^{2}\). The hypotheses hold. First, \(h\ge2\) and \(z^{2}\le z\le y_{0}\le 1/(60h)\). Second, the complement of \(G[T]\) is \(P_{h}\)-free, because \(G\in\mathcal C\) is \(\overline{P_{h}}\)-free, and it is \((z^{2})^{2}\)-sparse. Third, since \(y\ge \rho\) and \(z\ge \rho^{c}\),
+\begin{equation}\label{eq:boot-path-order}
+ z^{4}|T|\ge \rho^{B+c(e+4)+1}n\ge \rho^{-1}>2,
+\end{equation}
+so \(|T|\ge (z^{2})^{-2}\), which is the order hypothesis of the contract. Retain \(K=\lceil z^{-2}\rceil\) blocks of the anticomplete output; they are pairwise complete in \(G\), and their width is at least \(\lfloor z^{4}|T|\rfloor\ge2\). By \eqref{eq:boot-path-order} the floor loses at most a factor \(2\). Because \(z\le\allowbreak c_{0}/2\) implies \(z^{2}\le\allowbreak c_{0}/2\), width at least \((c_{0}/2)z^{B+e+4}n\ge\allowbreak z^{B+e+6}n \ge\allowbreak n/K^{(B+e+6)/2}\). Also \(K\le\allowbreak 2\rho^{-2c}\le\allowbreak \rho^{-(2c+1)}\). This is another valid output.
+
+It remains to handle the case in which the minimum \(y\) is below \(\rho\). Now \(|F|\ge\allowbreak \rho^{RB}n\), and \(G[F]\) has maximum degree at most \(c_{0} \rho^{3}|F|\). Put \(K=\lceil 1/\rho\rceil\) and partition \(F\) into \(K\) equal floor-size blocks, discarding the remainder. The order condition \(n\ge\allowbreak \rho^{-(RB+3)}\) gives \(\rho|F|\ge\allowbreak \rho^{-2}>4\). Thus every block has size at least \(\rho|F|/4\). The inherited maximum degree is at most \(\rho \cdot \) this block size, since \(4c_{0} \rho\le\allowbreak 1\). The blockade is directed \(\rho\)-sparse in both directions, hence weakly \(\rho\)-semisparse, and has width \(\rho^{RB+1}n/4\ge\allowbreak \rho^{RB+3}n\ge\allowbreak n/K^{RB+3}\). Its length is at most \(\rho^{-2}\). This proves the warm conclusion.
+\end{proof}
+\subsection{A fixed R\"odl start and generalized niceness}\label{subsec:rodl-start}
+Let \(G\in\mathcal C\) have order \(n\). Contract~\ref{con:rodl}, for \(\overline{P_{h}}\)-free graphs at precision \(c_{0} y_{0}^{3}\), supplies a \(c_{0} y_{0}^{3}\)-restricted induced subgraph of order at least \(\delta n\), where \(\delta>0\) is the fixed R\"odl fraction; it is a member of \(\mathcal C\). In the \(G\)-sparse orientation use Theorem~\ref{thm:bootstrap}, the warm conclusion. In the complementary sparse orientation use Contract~\ref{con:path} with the fixed parameter \(1/(60h)\). This is legitimate: \(c_{0}y_{0}^{3}\le y_{0}^{2}\le (60h)^{-2}\), and the order hypothesis \(\delta n\ge (60h)^{2}\) holds once \(n\ge (60h)^{2}/\delta\), which is one of the fixed minimum orders absorbed below. Two blocks of its output form a complete blockade of length \(2\) and width at least \(\lfloor \delta n/(60h)^{2}\rfloor\ge1\). Absorb the fixed R\"odl and flooring constants by increasing a fixed exponent \(D_{0}\) and shrinking the allowed fixed upper cutoff for \(\rho\). There result fixed \(D_{0},\allowbreak C\) such that \(n\ge\allowbreak \rho^{-D_{0}}\) implies a weakly \(\rho\)-semisparse blockade of integer length \(K\) with \(2\le\allowbreak K\le\allowbreak \rho^{-C}\) and width at least \(n/K^{D_{0}}\). For explicit absorption, if the R\"odl fraction is \(\delta\), use \(L_{\delta}=\lceil \log _{2}(1/\delta)\rceil\); \(n\ge\allowbreak \rho^{-(Q+L_{\delta})}\) ensures that its subset meets the warm order bound, and a width exponent increased by \(L_{\delta}\) absorbs its size fraction. Increase \(D_{0}\) further for the fixed complete-blockade branch and its fixed minimum order.
+
+Lemma~\ref{lem:layout} then applies verbatim. Choose \(S\ge\allowbreak 8D_{0}+8\) with \(2^{-S}\) below the target cutoff, and use \(\rho=\varepsilon^{S}\). It gives generalized niceness with \(M=\max (4D_{0},\allowbreak 2D_{0}+S D_{0}),\allowbreak  N=\max (3,\allowbreak 4D_{0},\allowbreak 2D_{0}+C S D_{0})\). The large-graph output has \(\lceil 1/\varepsilon\rceil\) blocks of width \(\varepsilon^{N} n\), every pair complete or weakly \(\varepsilon^{8}\)-sparse; the small-graph output is \(\hom (G)\ge\allowbreak \varepsilon^{M} n\). The layout proof uses only the displayed polynomial length cap and weak semisparsity.
+
+The bootstrap uses only the local oracle and the sparse-path extraction contract for \(P_h\); it does not assume \(\EH(P_h)\).
+
+
+\Needspace{8\baselineskip}
+\section{The arbitrary-pattern layout argument}\label{app:layout}
+
+The pattern may be any graph. Only pairs declared complete are required to be complete; the counted errors are edges across pattern nonedges. The terminal product proof will later use uniform complete or anticomplete blockades, a distinct requirement.
+
+A hereditary class \(\mathcal C\) satisfies \emph{generalized niceness} if there are constants \(M,N>0\) such that, for every member \(G\) and every \(0<\varepsilon<1/2\), either \(\hom(G)\ge\varepsilon^{M}|G|\), or \(G\) has a blockade of length \(\lceil1/\varepsilon\rceil\) and width at least \(\varepsilon^{N}|G|\) in which every pair is complete or weakly \(\varepsilon^{8}\)-sparse.
+
+\begin{lemma}[Arbitrary-pattern layout]\label{lem:layout}
+Let \(\mathcal C\) be a hereditary class. Suppose fixed \(D_{0}\ge 1\), \(C>0\), \(L>0\) and \(\rho_{0}>0\) satisfy: for every \(0<\rho<\rho_{0}\) and every member \(F\) of \(\mathcal C\) with \(|F|\ge \rho^{-L}\), there is a weakly \(\rho\)-semisparse blockade in \(F\) of integer length \(K\) with \(2\le K\le \rho^{-C}\) and width at least \(|F|/K^{D_{0}}\). Then \(\mathcal C\) satisfies generalized niceness. This remains true for coarse-scale \(K=2\); no lower bound \(K\ge 1/\varepsilon\) is needed at the input.
+\end{lemma}
+\begin{proof}
+Choose a fixed \(S\ge\allowbreak 8D_{0}+8\) with \(2^{-S}<\rho_{0}\). For \(0<\varepsilon<1/2\) set \(\rho=\varepsilon^{S},\allowbreak  \ell=\lceil 1/\varepsilon\rceil,\allowbreak  \sigma=\varepsilon^{4D_{0}},\allowbreak  M=\max (4D_{0},\allowbreak 2D_{0}+S L)\). First assume \(n\ge\allowbreak \varepsilon^{-M}\). A layout consists of disjoint blocks \(A_{i}\) and an arbitrary pattern \(J\); a pattern edge means the corresponding actual block pair is complete. Wrong pairs are actual \(G\)-edges between blocks whose pattern pair is a nonedge. An unordered ambient pair is decided if and only if its two vertices do not lie together in one current block: equivalently, at least one endpoint is outside the union, or the endpoints lie in different blocks. Pairs within one block are undecided. Choose a layout maximizing its number of blocks subject to: \(|A_{i}|\ge\allowbreak \sigma n\); \(\sum _{i} |A_{i}|^{1/D_{0}}\ge\allowbreak n^{1/D_{0}}\); wrong-pair count at most \(\rho \cdot \) decided-pair count. The one-block layout \(A_{1}=G\) exists. No cograph restriction is placed on \(J\).
+
+If there are at least \(\ell\) blocks, choose \(\ell\) of them. On every pattern nonedge, its edge count is at most \(\rho\cdot n^{2}/2\). Since both blocks have size at least \(\sigma n\), their density is at most \(\rho/(2\sigma^{2})\le\allowbreak \varepsilon^{8}\). Pattern edges are genuinely complete. This gives the required blockade, with complete or weakly \(\varepsilon^{8}\)-sparse pairs and width at least \(\varepsilon^{4D_{0}}n\).
+
+Otherwise there are fewer than \(\ell\le\allowbreak 2/\varepsilon\) blocks, so one block A has size at least \((\varepsilon/2)^{D_{0}} n\ge\allowbreak \varepsilon^{2D_{0}}n\). In particular \(|A|\ge\allowbreak \rho^{-L}\), and the target interface applies inside A. If its returned \(K\) is at least \(\ell\), choose \(\ell\) of its blocks directly. Their width is at least \(|A|/K^{D_{0}} \ge\allowbreak \varepsilon^{2D_{0}}\cdot \rho^{C D_{0}}n =\varepsilon^{2D_{0}+S C D_{0}}n\), and their precision \(\rho\) is at most \(\varepsilon^{8}\). If \(K<\ell\), replace A in the layout by all \(K\) returned blocks. Each has size at least \(\varepsilon^{4D_{0}}n\), and their \(1/D_{0}\)-power mass is at least \(|A|^{1/D_{0}}\). The new pattern substitutes the returned complete/sparse pattern at A. Old complete pairs remain complete. Old wrong pairs can only disappear; new wrong pairs occur only between children of \(A\), on non-complete returned pairs, and by weak \(\rho\)-sparsity of those pairs they number at most \(\rho\) times the cross-pair count. No bound on individual degrees is used here. Those cross pairs are newly decided; discarded vertices only add more decided pairs. Thus the invariant is preserved, contradicting maximality because \(K\ge\allowbreak 2\).
+
+Therefore every \(n\ge\allowbreak \varepsilon^{-M}\) graph has an \((\varepsilon^{-1},\allowbreak \varepsilon^{N} n)\) blockade with complete or weakly \(\varepsilon^{8}\)-sparse pairs, where \(N=\max (3,\allowbreak 4D_{0},\allowbreak 2D_{0}+S C D_{0})\). For \(n<\varepsilon^{-M}\), a singleton supplies the homogeneous-set alternative, since \(\varepsilon^{M}n<1\). This is generalized niceness as defined before the lemma, with these \(M\) and \(N\).
+\end{proof}
+
+\Needspace{8\baselineskip}
+\section{Ordered tails and the relative ordered-class EH interface}\label{app:tail}
+
+The input is the quantified \(T_r^{(s)}\) contract of Section~\ref{sec:ambient}. Throughout this appendix \(A,e,C,K,D,E\) and \(y_{*}\) denote its constants \(A_{r},e_{r},c_{r},k_{r},d_{r},E_{r}^{*}\) and \(\eta_{r}\). The output is Hypothesis~\ref{hyp:oracle} for the hereditary class \(\mathcal C=C_{r,s}=\co(E_r\cap\Forb(P_s))\) and \(h=s\). Its blockade output \((O_{2})\) need only be weakly semisparse, whereas its clean-root output \((O_{3})\) must be directed. The terminal proof invoked below is expanded in Appendix~\ref{app:terminal}.
+
+Let \(G\) belong to \(C_{r,\allowbreak s}\), be \(y^{3}\)-sparse, and have order \(n\), with \(0<\rho\le\allowbreak y\le\allowbreak \min (y_{*},\allowbreak 1/100),\allowbreak  n\ge\allowbreak \rho^{-(E+2)}\). In an \(E_{r}\) order of \(\overline{G}\), take the last \(m=\lceil yn\rceil\) vertices as \(Y\) and take the prefix as \(U\). Then \(yn\le\allowbreak m\le\allowbreak 2yn,\allowbreak  m\ge\allowbreak \rho^{-(E+1)}\ge\allowbreak \rho^{-E}\). Every root \(u\) precedes \(Y\), so no induced \(P_{r}\) with endpoint \(u\) occurs in \(\overline{G}[Y\cup\{u\}]\). The ambient complement is \(P_{s}\)-free. Apply \(T_{r}^{(s)}\) with \(x=\rho\) and coarse parameter \(y\).
+
+\(T_{1}\) yields a set \(X\) of size at least \(y^{A+1}n\). At most \(y^{3} n\) roots are full to \(X\), by the degree of any fixed vertex of nonempty \(X\). All other roots form \(Z\) of size at least \(n-2yn-y^{3} n\ge\allowbreak (1-3y)n\), and \(Z\) is directed \(\rho/4\)-sparse to \(X\).
+
+\(T_{2}\) yields its actual scale \(z\) in [\(\rho^{C},\allowbreak y\)] and size \(z^{e} m\ge\allowbreak z^{e} y n\ge\allowbreak z^{e+1}n\). The direction of the last inequality uses \(z\le\allowbreak y\).
+
+\(T_{3}\) yields \(k\ge\allowbreak 1/y\) and width \(m/k^{D}\ge\allowbreak yn/k^{D}\ge\allowbreak n/k^{D+1}\). Its cap remains \(k\le\allowbreak \rho^{-K}\). This blockade is directed \(\rho\)-semisparse, hence weakly \(\rho\)-semisparse, and is an \((O_{2})\) output.
+
+Thus Hypothesis~\ref{hyp:oracle} holds for \(\mathcal C=C_{r,s}\), with \(y_{*}\) as the initial cutoff \(y_{0}\) and with constants \(a=\max (4,\allowbreak A+1),\allowbreak  b=3,\allowbreak  c=\max (2,\allowbreak C,\allowbreak K),\allowbreak  d=D+1,\allowbreak  e_{\mathrm{or}}=\max (4,\allowbreak e+1),\allowbreak  L=E+2\). There is no \(O_{1}\) output, which the bootstrap explicitly permits. The same argument works in every induced member of \(C_{r,\allowbreak s}\).
+\subsection{Explicit bootstrap and layout parameters}\label{subsec:tail-parameters}
+Apply Appendix~\ref{app:bootstrap} with \(h=s\) and the hereditary class \(\mathcal C=C_{r,s}\). For example take \(c_{0}=2^{-12}\); then \(c_{0}<\exp (-6)\). Choose a fixed positive \(y_{0}\) with \(y_{0}\le\allowbreak \min (y_{*},\allowbreak c_{0}^{4}/2,\allowbreak c_{0}^{2},\allowbreak c_{0}/2,\allowbreak 1/6,\allowbreak 1/(60s),\allowbreak 1/100)\).
+
+As in \eqref{eq:boot-constants}, with \(e_{\mathrm{or}}\) in place of \(e\), put \(B=\max (6(e_{\mathrm{or}}+1),\allowbreak a+4,\allowbreak 4),\allowbreak  R=2c,\allowbreak  Q=\max (L+B+1,\allowbreak RB+3,\allowbreak B+c(e_{\mathrm{or}}+4)+2),\allowbreak  D_{w}=\max (B+d+1,\allowbreak a+B+2,\allowbreak (B+e_{\mathrm{or}}+6)/2,\allowbreak RB+3),\allowbreak  C_{w}=2c+1\). Then the warm conclusion of Theorem~\ref{thm:bootstrap} holds for all \(n\ge\allowbreak \rho^{-Q}\): a weakly \(\rho\)-semisparse blockade of integer length \(k\) with \(2\le\allowbreak k\le\allowbreak \rho^{-C_{w}}\) and width at least \(n/k^{D_{w}}\).
+
+Let \(\delta_{0}\) be the fixed R\"odl fraction for \(\overline{P_{s}}\) at precision \(c_{0}\cdot y_{0}^{3}\). Write \(L_{\delta}=\lceil \log _{2}(1/\delta_{0})\rceil,\allowbreak  J_{s}=\lceil \log _{2}(2(60s)^{2})\rceil+2,\allowbreak  D_{0}=\lceil \max (Q,\allowbreak D_{w})\rceil+L_{\delta}+J_{s},\allowbreak  \rho_{0}=y_{0}/2\). The R\"odl subset in an \(n\ge\allowbreak \rho^{-D_{0}}\) graph has order at least \(\rho^{-Q}\). The complementary orientation uses Contract~\ref{con:path} for \(P_{s}\) at parameter \(1/(60s)\), keeping two complete blocks. The contract applies: \(c_{0}y_{0}^{3}\le y_{0}^{2}\le(60s)^{-2}\), and the R\"odl subset has order at least \(\rho^{-Q}>(60s)^{2}\), because \(\rho<y_{0}\le 1/(60s)\) and \(Q\ge3\). The exponent \(J_{s}\) absorbs its floor and width constant. Hence the global target interface is a weakly \(\rho\)-semisparse blockade of integer length \(k\) with \(2\le\allowbreak k\le\allowbreak \rho^{-C_{w}}\) and width at least \(n/k^{D_{0}}\).
+
+Choose integer \(S\ge\allowbreak 8D_{0}+8\) with \(2^{-S}<\rho_{0}\), and define \(M=\max (4D_{0},\allowbreak 2D_{0}+S D_{0}),\allowbreak  N=\max (3,\allowbreak 4D_{0},\allowbreak 2D_{0}+C_{w} S D_{0})\). The proved layout lemma gives, for every member \(G\) and \(0<\varepsilon<1/2\), either \(\hom (G)\ge\allowbreak \varepsilon^{M}|G|\) or a complete/weak-\(\varepsilon^{8}\)-sparse blockade of length \(\lceil 1/\varepsilon\rceil\) and width \(\varepsilon^{N}|G|\). This proves generalized niceness with every scale and order quantified.
+\subsection{Sufficient conditions for EH of the ordered class}\label{subsec:tail-eh}
+Assume additionally: \((W_{s})\) strong wonderfulness for \(\overline{P_{s}}\)-free graphs with some exponent \(a_{s}\ge\allowbreak 6\), valid for equal-sized blocks without anticonnectivity; \((V_{s}) \operatorname{EH}(P_{s-1})\), hence normalized \(P_{s-1}\) virality with exponent \(v\ge\allowbreak 1\).
+
+The general path leaf-fibre proof gives, in every \(y\)-sparse \(P_{s}\)-free graph, either a \(y^{4}\)-restricted set of size at least \(y^{4(s-1)v+4}n\), or an anticomplete pair \(X,\allowbreak Y\) with \(X\) at least this size and \(|Y|\ge\allowbreak (1-(s-1)y)n\). Indeed fix the last \(s-2\) vertices of the abundant ordered \(P_{s-1}\) copies. Their endpoint fibre \(X\) lies in the neighbourhood of the first fixed core vertex. Delete the core and all its neighbourhoods to get \(Y\). An edge from \(Y\) to \(X\) would extend to an induced \(P_{s}\). For \(n<(s-2)/y\), a singleton handles the restricted outcome.
+
+As in \eqref{eq:term-constants}, set \(P=\max (M,\allowbreak N+3),\allowbreak  A_{\mathrm{term}}=\max (a_{s} P,\allowbreak 4(s-1)v+4,\allowbreak 4),\allowbreak  c_{T}=y_{T}=2^{-4s},\allowbreak  B_{\mathrm{term}}=A_{\mathrm{term}}+2,\allowbreak  d_{T}=2A_{\mathrm{term}}+4\). Lemma~\ref{lem:three} supplies a three-output oracle for \(y\)-restricted graphs in \(C_{r,\allowbreak s}\): \(\hom \ge\allowbreak y^{A_{\mathrm{term}}} n\); or a \(y^{4}\)-restricted set of that size; or an orientation-controlled pure pair with small side of that size and large side \((1-(s-1)y)n\). The residual chain survives at least \(\exp (-2(s-1))>c_{T}\), so the compact-scale and product proofs apply without further changes.
+
+If \(\delta_{T}\) is the fixed R\"odl fraction for \(\overline{P_{s}}\) at precision \(c_{T}y_{T}\), put \(D_{\mathrm{term}}=d_{T}+\lceil \log _{2}(1/\delta_{T})\rceil\). Then every member of \(E_{r} \cap  \operatorname{Forb}(P_{s})\) has a homogeneous set of size at least \(n^{1/(8D_{\mathrm{term}})}\).
+
+Only virality of the single forbidden graph \(P_{s-1}\) is used. No \(\operatorname{EH}\)-to-virality statement for the hereditary class \(E_{r}\) is asserted.
+\subsection{How to use this in a rooted-path induction}\label{subsec:tail-induction}
+A negative layer sequence in an \(\operatorname{RP}_{q}\) construction has transversals in \(E_{q-1}\): the negative witness prefixes any rooted \(P_{q-1}\) from the earliest selected vertex to form a forbidden rooted \(P_{q}\). If the ambient complement is \(P_{s}\)-free, its transversals actually belong to \(E_{q-1} \cap  \operatorname{Forb}(P_{s})\).
+
+Therefore, for a fixed final forbidden path \(P_{s}\), a potential rooted induction has the following acyclic pattern: \(T_{q-1}^{(s)},\allowbreak  W_{s},\allowbreak  \operatorname{EH}(P_{s-1})\Longrightarrow\operatorname{EH}(E_{q-1} \cap  \operatorname{Forb}(P_{s}))\), and the latter is the negative-transversal input for \(T_{q}^{(s)}\).
+
+The positive/frontier branch separately uses lower rooted Tooth theorems at \(q-1\) for the first/canonical purification and at \(q-2\) for the offending-pair purification. Those lower theorems must all be proved with the same ambient superscript \(s\). The ordered-tail theorem above supplies the required negative-class \(\operatorname{EH}\) input, not the entire positive/frontier induction.
+
+\Needspace{8\baselineskip}
+\section{Leaf fibres, cleanup and the terminal product argument}\label{app:terminal}
+Fix \(s\ge7\). Assume hereditary niceness, \(W_s\), \(\EH(P_{s-1})\), and fixed-precision R\"odl. We work in a hereditary subclass of the \(\overline{P_s}\)-free graphs.
+
+\subsection{Normalization of the single-path viral input}
+Let \(h=s-1\). The viral consequence of \(\EH(P_h)\) can be normalized, with a fixed \(v\ge1\), to say that for every \(0<\varepsilon<1/2\) and every graph \(J\) of order \(n\), either there is an \(\varepsilon\)-restricted set of order at least \(\varepsilon^v n\), or there are at least \(\varepsilon^{hv}n^h\) ordered induced \(P_h\) embeddings. This is only virality of the single graph \(P_h\), not of the class \(E_r\).
+
+We use the following maximum-degree normalization. Enlarge a constant \(c_0\ge1\) so that the usual edge-density viral statement has output-size exponent at most \(c_0\) and copy-count exponent at most \(hc_0\). Apply it at \(\varepsilon/4\). In a set with density at most \(\varepsilon/4\) in one orientation, remove vertices having degree greater than \(\varepsilon|S|/2\). Fewer than half the vertices are removed. The retained \(T\) has maximum degree at most \(\varepsilon|T|\), and
+\[
+ |T|\ge (\varepsilon/4)^{c_0}n/2\ge\varepsilon^{3c_0+1}n.
+\]
+In the copy alternative,
+\[
+ (\varepsilon/4)^{hc_0}n^h\ge\varepsilon^{3hc_0}n^h
+ \ge\varepsilon^{h(3c_0+1)}n^h.
+\]
+Thus \(v=3c_0+1\) suffices. Ordered embeddings are at least as numerous as the unlabelled copies used by the cited statement \cite{bfp}.
+
+\begin{lemma}[Path leaf-fibre dichotomy]\label{lem:leaf}
+For \(0<y<1/2\) and a \(y\)-sparse \(P_s\)-free graph \(J\) of order \(n\), either there is a \(y^4\)-restricted set of order at least \(y^{4(s-1)v+4}n\), or there are disjoint anticomplete sets \(X,Y\) with
+\[
+ |X|\ge y^{4(s-1)v+4}n,\qquad |Y|\ge(1-(s-1)y)n.
+\]
+\end{lemma}
+\begin{proof}
+If \(n<(s-2)/y\), a singleton supplies the first output, since
+\((s-2)y^{4(s-1)v+3}<1\) for \(s\ge7\), \(v\ge1\), and \(y<1/2\).
+Otherwise apply the normalized viral statement at \(\varepsilon=y^4\). Its restricted output is large enough. In the other case there are at least \(y^{4(s-1)v}n^{s-1}\) ordered path embeddings. Fix the ordered tail \((p_2,\ldots,p_{s-1})\) of a most frequent such embedding. At most \(n^{s-2}\) tails occur, so its endpoint fibre \(X\) has order at least \(y^{4(s-1)v}n\). Every \(x\in X\) is adjacent to \(p_2\) and nonadjacent to all later tail vertices.
+
+Let \(Y\) omit the \(s-2\) tail vertices and all their neighbourhoods. Then
+\[
+ |Y|\ge n-(s-2)-(s-2)yn\ge(1-(s-1)y)n,
+\]
+using \(n\ge(s-2)/y\). Since \(X\subseteq N(p_2)\), the two sets are disjoint. An edge \(ux\), with \(u\in Y\) and \(x\in X\), would extend the path to the induced \(P_s\), namely \(u,x,p_2,\ldots,p_{s-1}\). Hence they are anticomplete.
+\end{proof}
+
+
+\subsection{Cleanup from weak sparsity to equal-width directed sparsity}
+Assume niceness supplies constants \(N\ge3\), \(M>0\): for every \(0<\varepsilon<1/2\), either \(\hom(G)\ge\varepsilon^M n\), or there is a blockade of length \(\ell=\lceil1/\varepsilon\rceil\), width at least \(\varepsilon^N n\), whose pairs are complete or weakly \(\varepsilon^8\)-sparse. Set
+\begin{equation}\label{eq:term-constants}
+ P=\max(M,N+3),\quad
+ A=\max(a_sP,4(s-1)v+4,4),\quad B=A+2,
+\end{equation}
+and \(c=y_0=2^{-4s}\), \(d=2A+4=2B\). In Section~\ref{sec:conclusion} and Appendix~\ref{app:tail} these constants are written \(A_{\mathrm{term}}\), \(B_{\mathrm{term}}\), \(c_{T}=y_{T}\) and \(d_{T}\). For the cleanup put \(\varepsilon=y^{a_s}\), with \(0<y<1/2\), and suppose \(n>\varepsilon^{-P}\). Let \(m=\lceil\varepsilon^Nn\rceil\). Then
+\[
+ \varepsilon^Nn\ge\varepsilon^{-3},\qquad
+ \varepsilon^Nn\le m\le2\varepsilon^Nn.
+\]
+Each original block contains an \(m\)-subset. Choose these subsets \(X_i\) independently and uniformly. On every noncomplete pair the expected edge count is at most \(\varepsilon^8m^2\); the total over all such pairs has expectation at most
+\[
+ \binom\ell2\varepsilon^8m^2\le2\varepsilon^6m^2\le\varepsilon^5m^2.
+\]
+Fix an outcome no larger than this bound. In particular every originally sparse pair contains at most \(\varepsilon^5m^2\) edges. Delete from \(X_i\) all vertices having more than \(\varepsilon^3m\) neighbours in any relevant \(X_j\). Each other block causes fewer than \(\varepsilon^2m\) deletions, so the total in each \(X_i\) is at most \(2\varepsilon m\). The survivors \(D_i\) have order at least \(m/2\).
+
+Choose arbitrary subsets \(B_i\subseteq D_i\) of the common order
+\(w=\lceil\varepsilon^2m\rceil\). This is possible because \(\varepsilon^2m\ge1\) and
+\[
+ w\le2\varepsilon^2m\le\varepsilon m/4\le|D_i|.
+\]
+Every originally sparse pair is now sparse in both directions: its vertex degrees are at most \(\varepsilon^3m\le\varepsilon w\). Complete pairs stay complete. Moreover,
+\[
+ w\ge\varepsilon^{N+2}n,\qquad
+ \ell w\le4\varepsilon m\le8\varepsilon^{N+1}n\le y^2n.
+\]
+This is the exact input to \(W_s\). The cleanup neither needs anticonnectivity nor turns a mixed pattern into a uniform anticomplete pattern.
+
+\begin{lemma}[An orientation-controlled three-output lemma]\label{lem:three}
+Every \(y\)-restricted \(\overline{P_s}\)-free graph \(G\) has one of:
+\begin{enumerate}[label=(Q\arabic*)]
+\item \(\hom(G)\ge y^A n\);
+\item a \(y^4\)-restricted set of order at least \(y^A n\);
+\item disjoint pure sets \(X,Y\) with \(|X|\ge y^A n\) and \(|Y|\ge(1-(s-1)y)n\).
+\end{enumerate}
+In Q3 the pair is anticomplete if the declared sparse orientation is \(G\), and complete if it is \(F\).
+\end{lemma}
+\begin{proof}
+When \(F\) is the declared sparse graph, apply Lemma~\ref{lem:leaf}; its anticomplete pair becomes complete in \(G\). When \(G\) is sparse, use \(\varepsilon=y^{a_s}\). For \(n\le\varepsilon^{-P}\), a singleton gives Q1. For larger \(n\), the homogeneous niceness output gives Q1 because \(A\ge a_sM\). Otherwise perform the cleanup and apply \(W_s\) to the \(B_i\). Its restricted output has order at least \(w\ge\varepsilon^{N+2}n\ge y^A n\), giving Q2.
+
+In the remaining case a block \(B_i\) has at most \(yn\) outside vertices with degree strictly between zero and \(w/2\). Since \(\Delta(G)\le yn\), at most \(2yn\) outside vertices have at least \(w/2\) neighbours in \(B_i\), by counting edges incident with this block. The entire blockade occupies at most \(y^2n\) vertices. Thus at least \((1-3y-y^2)n\ge(1-4y)n\ge(1-(s-1)y)n\) vertices outside it have no neighbours in \(B_i\). Together with \(X=B_i\), these give the anticomplete Q3 output.
+\end{proof}
+
+\subsection{The compact scale potential}
+Suppose first that \(G\) is \(cy_0\)-restricted and \(0<x<y_0\). Call a scale \(y\in[x^2,y_0]\) admissible if there is an induced \(H\) that is \(cy\)-restricted and has order at least \(y^B n\). The endpoint \(y_0\) is admissible. There are finitely many vertex subsets and each gives a closed set of scales, so a minimum exists. Fix a witness \(H\). If \(y<x\), this witness is \(x\)-restricted and has order at least \(x^{2B}n=x^d n\).
+
+Assume \(y\ge x\), and fix one restricted orientation of \(H\). Build a residual chain. At every call before \(K=\lceil1/y\rceil\) steps, the step index \(j<K\) satisfies \(j<1/y\), so earlier Q3 outputs leave a residual of order at least
+\[
+ (1-(s-1)y)^j|H|\ge e^{-2(s-1)}|H|>c|H|.
+\]
+Here \((s-1)y\le1/2\) and \(\log(1-(s-1)y)\ge-2(s-1)y\), because \(y\le2^{-4s}\). Every residual is \(y\)-restricted in the same orientation. A Q1 output gives
+\[
+ \hom(G)\ge cy^{A+B}n\ge x^{A+B+1}n\ge x^d n.
+\]
+A Q2 output gives a set \(T\) of order at least \(cy^{A+B}n\) and restriction \(y^4\). Put \(y'=y^2\). Then \(x^2\le y'<y\), \(y^4\le c(y')\), and
+\[
+ |T|\ge cy^{A+B}n\ge y^{2B}n=(y')^B n,
+\]
+using \(B=A+2\) and \(c\ge y^2\). This contradicts minimality. If only Q3 occurs, take its small side as the next block and its large side as the new residual. The fixed orientation makes all completed blocks uniformly complete or uniformly anticomplete. After \(K\) steps their width is at least
+\[
+ y^{A+2}|H|\ge y^{A+B+2}n=y^d n\ge n/K^d.
+\]
+We therefore obtain a global trichotomy from the fixed restricted start: an \(x\)-restricted set of order at least \(x^d n\), a uniform complete or anticomplete blockade of integer length \(K\ge2\) and width at least \(n/K^d\), or \(\hom(G)\ge x^d n\).
+
+\subsection{Removing the fixed start}
+Let \(\delta_T\) be the fixed R\"odl fraction at precision \(cy_0\). Set
+\begin{equation}\label{eq:term-D}
+ L_T=\lceil\log_2(1/\delta_T)\rceil,\qquad D_s=d+L_T.
+\end{equation}
+For \(x<y_0\), \(x^{L_T}\le\delta_T\) and \(\delta_T/K^d\ge K^{-(d+L_T)}\) for \(K\ge2\). Applying the previous argument to a R\"odl subset yields the same trichotomy with exponent \(D_s\).
+
+For \(x\in[y_0,1/2)\), the fixed subset is already \(x\)-restricted because \(cy_0\le y_0\le x\). Its order is sufficient since \(x^{D_s}\le x^{L_T}\le2^{-L_T}\le\delta_T\). This also covers \(L_T=0\), when \(\delta_T=1\). Thus the trichotomy holds at every \(0<x<1/2\), with no precision cutoff depending on \(\delta_T\) and no excluded small-order case.
+
+\begin{lemma}[Uniform-blockade product criterion]\label{lem:product}
+If a hereditary class satisfies this trichotomy for some \(D\ge1\), every \(n\)-vertex member satisfies \(\hom(G)\ge n^{1/(8D)}\).
+\end{lemma}
+\begin{proof}
+Put \(Q(G)=\alpha(G)\omega(G)\) and \(\tau=1/(4D)\). For a uniformly complete blockade \(B_1,\ldots,B_k\),
+\(\omega(G)\ge\sum_i\omega(G[B_i])\) and \(\alpha(G)\ge\max_i\alpha(G[B_i])\). Their product is therefore at least \(\sum_iQ(G[B_i])\). The anticomplete case is symmetric. This superadditivity is asserted only for the two uniform types.
+
+Choose a minimum-order counterexample to \(Q(G)\ge n^\tau\). There is none at \(n=1\), or at \(2\le n\le2^{4D}\), since \(Q(G)\ge2\). Hence \(n>2^{4D}\). Use \(x=n^{-1/(2D)}<1/4\). The homogeneous output gives \(\hom(G)\ge\sqrt n\ge n^\tau\), a contradiction. A restricted set of order \(m\ge\sqrt n\ge1/x\) has, by the greedy independence bound in its sparse orientation, a homogeneous set of order at least
+\[
+ \frac{m}{xm+1}\ge\frac1{2x}=\frac12 n^{1/(2D)}>n^{1/(4D)}.
+\]
+This is also a contradiction. In the blockade output, every nonempty block is proper. Heredity and minimality give \(Q(G[B_i])\ge|B_i|^\tau\), so
+\[
+ Q(G)\ge\sum_i |B_i|^\tau
+ \ge k(n/k^D)^\tau=n^\tau k^{3/4}>n^\tau.
+\]
+Thus \(Q(G)\ge n^\tau\) for all members, and \(\hom(G)^2\ge Q(G)\) gives the exponent \(1/(8D)\).
+\end{proof}
+
+\begin{thebibliography}{9}\small\raggedright
+\bibitem{p6} machine-qed. \emph{The Erd\H{o}s--Hajnal property for the six-vertex path}. Unpublished manuscript, repository version \texttt{v1.0-proof}, 27 September 2026, Theorem A. Not refereed.\\ \url{https://github.com/machine-qed/erdos-hajnal-six-vertex-path/tree/v1.0-proof}.
+\bibitem{nss} Tung Nguyen, Alex Scott and Paul Seymour. \emph{Induced subgraph density. V. All paths approach Erd\H{o}s--Hajnal}. arXiv:2307.15032v2.\\ \url{https://arxiv.org/html/2307.15032v2}.
+\bibitem{bfp} Matija Buci\'c, Jacob Fox and Huy Tuan Pham. \emph{Equivalence between Erd\H{o}s--Hajnal and polynomial R\"odl and Nikiforov conjectures}. arXiv:2403.08303v2, 19 April 2024.\\ \url{https://arxiv.org/html/2403.08303v2}.
+\bibitem{hjz} Shenwei Huang, Yiao Ju and Yidong Zhou. \emph{Erd\H{o}s--Hajnal conjecture beyond five-vertex graphs}. arXiv:2606.06258v3, 31 August 2026, Lemma 2.10.\\ \url{https://arxiv.org/html/2606.06258v3}.
+\bibitem{hayward} Ryan B. Hayward. \emph{Weakly triangulated graphs}. Journal of Combinatorial Theory, Series B 39(3) (1985), 200--208.\\ \url{https://doi.org/10.1016/0095-8956(85)90050-4}.
+\bibitem{rodl} V. R\"odl. \emph{On universality of graphs with uniformly distributed edges}. Discrete Mathematics 59 (1986), 125--134.
+\end{thebibliography}
+\end{document}
