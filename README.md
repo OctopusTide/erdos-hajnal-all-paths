@@ -39,7 +39,7 @@ theorem for the complement of P_6, EH(P_5) (NSS VII, Thm 1.2) and the comb lemma
 
 ## Repository
 
-- `paper/` — the manuscript (`All_paths_EH.pdf`, `All_paths_EH.tex`).
+- `paper/` — the manuscript (`ErdosHajnalPaths.pdf`, `ErdosHajnalPaths.tex`).
 - `lean/` — the Lean 4 development.
   - `AllPathsMain.lean` — the induction (`tooth_all`, `eh_path_step`, `eh_all_paths`).
   - `AllPaths*.lean`, `RP5*.lean` — the rest of the proof.
@@ -60,7 +60,7 @@ lake build
 lake env lean FinalAllLocal439.lean   # prints statements and axioms
 ```
 
-Paper: `latexmk -pdf paper/All_paths_EH.tex`.
+Paper: `latexmk -pdf paper/ErdosHajnalPaths.tex`.
 
 ## Notes
 
