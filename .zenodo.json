@@ -1,0 +1,30 @@
+{
+  "title": "The Erdős–Hajnal property for paths",
+  "upload_type": "publication",
+  "publication_type": "preprint",
+  "creators": [
+    {
+      "name": "Zhou, Yuwen",
+      "affiliation": "University of British Columbia Okanagan"
+    }
+  ],
+  "description": "<p>We prove that every path has the Erdős–Hajnal property: for every integer s ≥ 1 there is δ<sub>s</sub> &gt; 0 such that every graph on n vertices with no induced s-vertex path has a clique or a stable set of size at least n<sup>δ<sub>s</sub></sup>. The proof is an induction on s, starting from the six-vertex path. From the Erdős–Hajnal property of P<sub>s−1</sub> we build a finite forcing template, which controls long blockades in graphs whose complement is P<sub>s</sub>-free. Inside this class we then prove a family of rooted \"Tooth\" statements by induction on the rooted path order, obtaining the required Erdős–Hajnal exponents for ordered classes along the way. A comb argument applied to the last Tooth statement gives a local structural alternative, which a variable-scale bootstrap converts into polynomial homogeneous sets. The implication has been formalized in Lean 4: there, the Erdős–Hajnal property of every path follows from Rödl's theorem, the Erdős–Hajnal property of P<sub>5</sub>, and the comb lemma of Nguyen, Scott and Seymour.</p><p>This research was carried out with the help of Claude Opus 5.5, which assisted in developing both the proof and the Lean formalization. The work has not yet been reviewed by specialists.</p>",
+  "license": "cc-by-4.0",
+  "access_right": "open",
+  "keywords": [
+    "Erdős–Hajnal conjecture",
+    "induced paths",
+    "graph theory",
+    "extremal combinatorics",
+    "Lean 4",
+    "formal verification"
+  ],
+  "version": "1.0",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/OctopusTide/erdos-hajnal-all-paths",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}
