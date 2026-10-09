@@ -1,4 +1,6 @@
-# An inductive approach to the Erdős–Hajnal property for fixed induced paths
+# The Erdős–Hajnal property for paths
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23270286.svg)](https://doi.org/10.5281/zenodo.23270286)
 
 **Yuwen Zhou** — University of British Columbia Okanagan
 
@@ -61,6 +63,20 @@ lake env lean FinalAllLocal439.lean   # prints statements and axioms
 ```
 
 Paper: `latexmk -pdf paper/ErdosHajnalPaths.tex`.
+
+## Citation
+
+```bibtex
+@misc{Zhou2026ErdosHajnalPaths,
+  author    = {Zhou, Yuwen},
+  title     = {The {Erd\H{o}s}--{Hajnal} property for paths},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.23270286},
+  url       = {https://doi.org/10.5281/zenodo.23270286},
+  note      = {Preprint}
+}
+```
 
 ## Notes
 
